@@ -49,35 +49,36 @@ architecture a_banco_ula of banco_ula is
 
     begin
         -- mapeia as portas do registrador
-        banco_de_registradores_instance: banco_de_registradores
-        port map(   reg_select_1    =>  select_reg_1,
-                    reg_select_2    =>  select_reg_2,
-                    regWrite        =>  regWrite,
-                    entr            =>  saida_ula,
-                    wr_en           =>  wr_en,
-                    clk             =>  clk,
-                    rst             =>  rst,
-                    reg_data1       =>  saida_reg_1,
-                    reg_data2       =>  saida_reg_2
-        );
+    banco_de_registradores_instance: banco_de_registradores
+    port map(   
+        reg_select_1    =>  select_reg_1,
+        reg_select_2    =>  select_reg_2,
+        regWrite        =>  regWrite,
+        entr            =>  saida_ula,
+        wr_en           =>  wr_en,
+        clk             =>  clk,
+        rst             =>  rst,
+        reg_data1       =>  saida_reg_1,
+        reg_data2       =>  saida_reg_2
+    );
     
         -- mapeia as portas da ULA
-        ula_instance: ULA 
-        port map(   ina => saida_reg_1,
-                    inb => mux_output,
-                    operationselect => operacao_ula,
-                    result => saida_ula
-        );
+    ula_instance: ULA 
+    port map(   
+        ina => saida_reg_1,
+        inb => mux_output,
+        operationselect => operacao_ula,
+        result => saida_ula
+    );
     
         -- define qual saída vamos utilizar, do registrador ou da entrada pré definida
-        mux_output <= saida_reg_2 when mux_select = '0' else
-                      valor_entrada when mux_select = '1' else
-                      "0000000000000000"; 
+    mux_output <= 
+        saida_reg_2 when mux_select = '0' else
+        valor_entrada when mux_select = '1' else
+        "0000000000000000"; 
 
         -- grava o resultado para utilizar nos testes
         result <= saida_ula;
 
-        
-    
-	end a_banco_ula;
+	end architecture;
 	
