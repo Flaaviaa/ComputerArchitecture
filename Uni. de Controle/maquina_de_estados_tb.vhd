@@ -10,14 +10,14 @@ entity maquina_de_estados_tb is
         port(   clk      : in std_logic;
                 rst      : in std_logic;
                 wr_en    : in std_logic;
-                saida    : out unsigned(2 downto 0)
+                saida    : out unsigned(0 downto 0)
         );
         end component;
 
         constant period_time : time      := 100 ns;
         signal   finished    : std_logic := '0';
         signal   clk, reset, wr_en  : std_logic;
-        signal   saida : unsigned(1 downto 0);
+        signal   saida : unsigned(0 downto 0);
 
     begin
         uut: maquina_de_estados port map(
@@ -55,7 +55,7 @@ entity maquina_de_estados_tb is
    begin
       wait for 200 ns;
       wr_en <= '1';
-      wait for 100 ns;
+      wait for 100 ns; 
       wait;                     -- <== OBRIGATÓRIO TERMINAR COM WAIT; !!!
    end process;
-end architecture a_teste_reg16bits_tb;
+end architecture;
