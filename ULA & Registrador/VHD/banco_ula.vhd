@@ -12,7 +12,7 @@ entity banco_ula is
             select_reg_2               : in unsigned(2 downto 0);
             valor_entrada              : in unsigned(15 downto 0);
             regWrite                   : in unsigned(2 downto 0);
-            result                     : out unsigne(15 downto 0)
+            result                     : out unsigned(15 downto 0)
     );
 end entity;
 
