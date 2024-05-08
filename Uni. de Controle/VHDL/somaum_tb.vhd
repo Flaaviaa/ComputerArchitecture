@@ -2,29 +2,28 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity PC_tb is
+entity somaum_tb is
     end;
 
-    architecture a_PC_tb of PC_tb is
-        component reg16bits
-        port(   clk      : in std_logic;
-                wr_en    : in std_logic;
-                data_in  : in unsigned(15 downto 0);
-                data_out : out unsigned(15 downto 0)
+    architecture a_somaun_tb of somaum_tb is
+        component somaum
+        port(   
+            clk          : in std_logic;
+            entrada      : in unsigned(15 downto 0);
+            saida        : out unsigned(15 downto 0)
         );
         end component;
 
         constant period_time : time      := 100 ns;
         signal   finished    : std_logic := '0';
-        signal   clk, wr_en  : std_logic;
-        signal   data_in, data_out : unsigned(15 downto 0);
+        signal   clk         : std_logic;          
+        signal   entrada, saida_maisum : unsigned(15 downto 0);
 
     begin
-        uut: PC port map(
+        uut: somaum port map(
             clk => clk,
-            wr_en => wr_en,
-            data_in => data_in,
-            data_out => data_out
+            entrada => entrada,
+            saida => saida_maisum
         );
     
     sim_time_proc: process
@@ -46,9 +45,8 @@ entity PC_tb is
    process                      -- sinais dos casos de teste (p.ex.)
    begin
       wait for 200 ns;
-      wr_en <= '1';
-      data_in <= "0000000000000001";
+      entrada <= "0000000000000001";
       wait for 100 ns;
       wait;                     -- <== OBRIGATÓRIO TERMINAR COM WAIT; !!!
    end process;
-end architecture a_teste_reg16bits_tb;
+end architecture;

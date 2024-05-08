@@ -12,7 +12,6 @@ entity PC is
  end entity;
 
  architecture a_PC of PC is
-    signal soma: unsigned(15 downto 0);
  begin
     process(clk, wr_en)  -- acionado se houver mudança em clk ou wr_en
     begin                
@@ -23,5 +22,5 @@ entity PC is
        end if;
     end process;
     
-    data_out <= soma;  -- conexao direta, fora do processo
+    data_out <= data_in;  -- conexao direta, fora do processo
  end architecture;
