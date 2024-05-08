@@ -47,6 +47,11 @@ entity somaum_tb is
       wait for 200 ns;
       entrada <= "0000000000000001";
       wait for 100 ns;
+      wait for 100 ns;
+      wait for 100 ns;
+      wait for 100 ns;
+      wait for 100 ns;
+      wait for 100 ns;
       wait;                     -- <== OBRIGATÓRIO TERMINAR COM WAIT; !!!
    end process;
 end architecture;

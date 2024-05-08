@@ -16,12 +16,13 @@ architecture a_somaum of somaum is
             clk      : in std_logic;
             wr_en    : in std_logic;
             data_in  : in unsigned(15 downto 0);
-            data_out : out unsigned(15 downto 0) 
+            data_out : out unsigned(15 downto 0);
+            result   : out unsigned(11 downto 0)
         );
     end component;
 
 
-    signal saida_maisum, entrada_maisum: unsigned(15 downto 0);
+    signal saida_maisum: unsigned(15 downto 0);
 
     begin
 
@@ -30,10 +31,10 @@ architecture a_somaum of somaum is
             clk => clk,
             wr_en => '1',
             data_in => saida_maisum, -- valor de entrada + 1
-            data_out => entrada_maisum
+            data_out => result,
+            result => '0'
         );
 
-        entrada_maisum <= entrada;
         saida_maisum <= entrada + "0000000000000001";
 end architecture;
 	
