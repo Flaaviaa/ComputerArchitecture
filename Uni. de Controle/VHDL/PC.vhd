@@ -14,11 +14,11 @@ entity PC is
  architecture a_PC of PC is
     signal soma: unsigned(15 downto 0);
  begin
-    process(clk,rst,wr_en)  -- acionado se houver mudança em clk, rst ou wr_en
+    process(clk,wr_en)  -- acionado se houver mudança em clk, rst ou wr_en
     begin                
        if wr_en='1' then
            if rising_edge(clk) then
-             registro <= data_in;
+             data_out <= data_in;
           end if;
        end if;
     end process;
