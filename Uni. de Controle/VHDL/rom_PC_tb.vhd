@@ -38,7 +38,8 @@ entity rom_PC_tb is
                 data_out : out unsigned(15 downto 0)
             );
         end component;
-
+        
+        
         begin
         uut : rom port map(
             clk => clk,

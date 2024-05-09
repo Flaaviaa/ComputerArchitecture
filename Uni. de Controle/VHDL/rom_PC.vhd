@@ -53,20 +53,20 @@ architecture a_rom_PC of rom_PC is
         );
     end component;
 
-    -- component somaum is
-    --     port(
-    --         entrada : in unsigned(6 downto 0);
-    --         saida   : out unsigned(6 downto 0)
-    --     );
-    -- end component;
+    component somaum is
+        port(
+            entrada : in unsigned(6 downto 0);
+            saida   : out unsigned(6 downto 0)
+        );
+    end component;
 
-    -- component rom is
-    --     port(
-    --         clk         : in std_logic;
-    --         endereco    : in unsigned(6 downto 0);
-    --         dado        : out unsigned(15 downto 0)
-    --     );
-    -- end component;
+    component rom is
+        port(
+            clk         : in std_logic;
+            endereco    : in unsigned(6 downto 0);
+            dado        : out unsigned(15 downto 0)
+        );
+    end component;
 
 
     begin
@@ -76,6 +76,17 @@ architecture a_rom_PC of rom_PC is
             data_in => pc_data_in,
             data_out => pc_data_out
         );
+
+        somaum_instance : somaum port map(
+            entrada => somaum_entrada,
+            saida => somaum_saida
+        );
+
+        rom_instance : rom port map(
+            clk => clk,
+            endereco => rom_
+        );
+
 end architecture;
 
 
