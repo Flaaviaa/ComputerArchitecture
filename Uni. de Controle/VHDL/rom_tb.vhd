@@ -11,7 +11,7 @@ architecture a_rom_tb of rom_tb is
     port(
         clk         : in std_logic;
         endereco    : in unsigned(6 downto 0);
-        dado        : out unsigned(11 downto 0)
+        dado        : out unsigned(15 downto 0)
     );
     end component;
     -- clock que permite o acesso ao dado
@@ -19,7 +19,7 @@ architecture a_rom_tb of rom_tb is
     -- posicao de memoria que queremos o dado
     signal endereco : unsigned(6 downto 0);
     -- saída do registrador da rom é em dado
-    signal dado : unsigned(11 downto 0);
+    signal dado : unsigned(15 downto 0);
     -- serve para ir de registrador em registrador mostrando o que há nele 
     signal contador : unsigned(6 downto 0) := "0000000";
 

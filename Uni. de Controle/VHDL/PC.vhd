@@ -6,8 +6,8 @@ entity PC is
     port( 
         clk      : in std_logic;
         wr_en    : in std_logic;
-        data_in  : in unsigned(15 downto 0);
-        data_out : out unsigned(15 downto 0)
+        data_in  : in unsigned(6 downto 0);
+        data_out : out unsigned(6 downto 0)
     );
  end entity;
 
