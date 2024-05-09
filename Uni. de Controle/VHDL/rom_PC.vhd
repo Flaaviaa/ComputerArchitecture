@@ -2,31 +2,6 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
--- component rom
---             port(
---                 clk         : in std_logic ;
---                 endereco    : in unsigned(6 downto 0);
---                 dado        : out unsigned(15 downto 0)
---             );
---         end component;
-
---         component somaum
---             port(
---                 clk     : in std_logic;
---                 entrada : in unsigned(15 downto 0);
---                 saida   : out unsigned(15 downto 0)
---             );
---         end component;
-
---         component PC
---             port(
---                 clk      : in std_logic;
---                 wr_en    : in std_logic;
---                 data_in  : in unsigned(15 downto 0);
---                 data_out : out unsigned(15 downto 0)
---             );
---         end component;
-
 entity rom_PC is
     port(
         clk : in std_logic;
@@ -84,7 +59,8 @@ architecture a_rom_PC of rom_PC is
 
         rom_instance : rom port map(
             clk => clk,
-            endereco => rom_
+            endereco => rom_endereco,
+            dado => rom_dado
         );
 
 end architecture;
