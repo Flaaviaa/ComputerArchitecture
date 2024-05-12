@@ -9,26 +9,47 @@ architecture a_PC_tb of PC_tb is
     signal registrador : unsigned(6 downto 0) := "0000000";
     signal stopcont : unsigned(6 downto  0) := "1000000";
     signal clk : std_logic;
-    signal wr_en : std_logic;
-    signal data_in : unsigned(6 downto 0);
-    signal data_out : unsigned(6 downto 0);
+    signal rst : std_logic := '0';
+    signal wr_en : std_logic := '1';
+    signal saltar : std_logic := '0';
+    signal data_in : unsigned(6 downto 0) := "0000000";
+    signal data_out : unsigned(6 downto 0) := "0000000";
 
     component PC is
     port(
+        rst      : in std_logic;
         clk      : in std_logic;
         wr_en    : in std_logic;
-        data_in  : in unsigned(6 downto 0);
-        data_out : out unsigned(6 downto 0)
+        saltar   : in std_logic;
+        endereco_entrada  : in unsigned(6 downto 0);
+        endereco_saida : out unsigned(6 downto 0)
     );
     end component;
 
     begin
     uut : PC port map(
         clk => clk,
+        rst => rst,
         wr_en => wr_en,
-        data_in => data_in,
-        data_out => data_out
+        saltar => saltar,
+        endereco_entrada => data_in,
+        endereco_saida => data_out
     );
+
+    data_in <= registrador;
+
+    process 
+    begin
+        
+        wait for 400 ns;
+        saltar <= '0';
+        wait for 400 ns;
+        saltar <= '1';
+        wait for 400 ns;
+        saltar <= '0';
+        wait;
+
+    end process;
 
     process
     begin
@@ -37,13 +58,7 @@ architecture a_PC_tb of PC_tb is
             clk <= '1';
             wait for 50 ns;
             clk <= '0';
-            if wr_en = '1' then
-                data_in <= registrador;
-                wr_en <= '0';
-            else
-                wr_en <= '1';
-            end if;
-            registrador <= registrador + "0000001";
+            registrador <= registrador + "0000010";
             end loop;
             wait;
             end process;

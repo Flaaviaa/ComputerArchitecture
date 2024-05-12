@@ -1,25 +1,37 @@
 v 4
-file . "rom_PC_tb.vhd" "b4b888af100f7daf2ad560bfeece4388ad3ec4e8" "20240509031409.609":
-  entity rom_pc_tb at 1( 0) + 0 on 57;
-  architecture a_rom_pc_tb of rom_pc_tb at 9( 101) + 4 on 58;
-file . "somaum_tb.vhd" "8163bdf416685005b0c9d59e75ffcf6f78b589e2" "20240509012827.745":
-  entity somaum_tb at 1( 0) + 0 on 39;
-  architecture a_somaum_tb of somaum_tb at 8( 96) + 0 on 40;
-file . "PC.vhd" "e2933a43d32c034b3158d91b9bf04e68fd1ecee5" "20240509031155.046":
-  entity pc at 1( 0) + 0 on 49;
-  architecture a_pc of pc at 14( 269) + 1 on 50;
+file . "maquina_de_estados.vhd" "11f6602db658724f7535715061b96b18408f0c1a" "20240512021600.767":
+  entity maquina_de_estados at 1( 0) + 0 on 239;
+  architecture a_maquina_de_estados of maquina_de_estados at 13( 271) + 1 on 240;
+file . "UC_tb.vhd" "1707940b1af6881ae1d9ccd0395e2b7b21acd252" "20240512062630.779":
+  entity uc_tb at 1( 0) + 0 on 275;
+  architecture a_uc_tb of uc_tb at 8( 99) + 0 on 276;
+file . "UC.vhd" "bff129d95f014e19feaaa114973165a1ca42c876" "20240512062609.790":
+  entity uc at 1( 0) + 0 on 273;
+  architecture a_uc of uc at 13( 234) + 0 on 274;
+file . "PC_tb.vhd" "41edaacaeb2a6d39e9d4a21ecab3c92e62923f23" "20240511210140.689":
+  entity pc_tb at 1( 0) + 0 on 221;
+  architecture a_pc_tb of pc_tb at 8( 92) + 0 on 222;
+file . "rom_PC.vhd" "54cf56d9355bc6b3298a63288f0ac87596ae1259" "20240510190916.421":
+  entity rom_pc at 1( 0) + 0 on 203;
+  architecture a_rom_pc of rom_pc at 13( 205) + 0 on 204;
+file . "somaum.vhd" "27c753be8609014e55a15bb2a9009fc2ccb8074b" "20240510005313.621":
+  entity somaum at 1( 0) + 0 on 167;
+  architecture a_somaum of somaum at 13( 232) + 0 on 168;
+file . "rom.vhd" "fda03349189cd0f9730a3ac87aac399578447f1a" "20240512062552.253":
+  entity rom at 1( 0) + 0 on 271;
+  architecture a_rom of rom at 14( 281) + 0 on 272;
 file . "rom_tb.vhd" "142d7c07cfce7ff44d88f7df3db7a4e6a77f5253" "20240508211627.231":
   entity rom_tb at 1( 0) + 0 on 29;
   architecture a_rom_tb of rom_tb at 9( 98) + 0 on 30;
-file . "rom.vhd" "60ef5ce7a42774055a6bd1e6ec6e57b839ef35d6" "20240508211257.308":
-  entity rom at 1( 0) + 0 on 27;
-  architecture a_rom of rom at 13( 245) + 0 on 28;
-file . "somaum.vhd" "2e6e37ce388e686423dc14ffc616f630d6f696c1" "20240509031233.239":
-  entity somaum at 1( 0) + 0 on 53;
-  architecture a_somaum of somaum at 12( 205) + 0 on 54;
-file . "rom_PC.vhd" "c0dca2a97c1ca8cefcd5caa27d134234ffa49247" "20240509031246.766":
-  entity rom_pc at 1( 0) + 0 on 55;
-  architecture a_rom_pc of rom_pc at 21( 467) + 0 on 56;
-file . "PC_tb.vhd" "76ee4e09b31df0cc7a3dd191e71ddd6cf45f5008" "20240509034001.878":
-  entity pc_tb at 1( 0) + 0 on 61;
-  architecture a_pc_tb of pc_tb at 8( 92) + 0 on 62;
+file . "PC.vhd" "cd8230c23cdb0b22f191c2859b2d0194e7af1135" "20240511210119.544":
+  entity pc at 1( 0) + 0 on 219;
+  architecture a_pc of pc at 16( 369) + 1 on 220;
+file . "somaum_tb.vhd" "f716fd58e5b72c1f52247421df65a8ff15b5326a" "20240510010118.927":
+  entity somaum_tb at 1( 0) + 0 on 171;
+  architecture a_somaum_tb of somaum_tb at 8( 96) + 0 on 172;
+file . "rom_PC_tb.vhd" "f3b34a6f151fa2da97bd7655fe657636d612f326" "20240510190928.600":
+  entity rom_pc_tb at 1( 0) + 0 on 205;
+  architecture a_rom_pc_tb of rom_pc_tb at 9( 101) + 4 on 206;
+file . "maquina_de_estados_tb.vhd" "634792fefb103305e71026ac41107c0bb2ce3957" "20240512024430.145":
+  entity maquina_de_estados_tb at 1( 0) + 0 on 241;
+  architecture a_maquina_de_estados_tb of maquina_de_estados_tb at 8( 112) + 0 on 242;

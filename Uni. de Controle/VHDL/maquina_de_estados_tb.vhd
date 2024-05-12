@@ -5,19 +5,19 @@ use ieee.numeric_std.all;
 entity maquina_de_estados_tb is
     end;
 
-    architecture a_maquina_de_estados_tb of maquina_de_estados_tb is
-        component maquina_de_estados
-        port(   clk      : in std_logic;
-                rst      : in std_logic;
-                wr_en    : in std_logic;
-                saida    : out unsigned(0 downto 0)
-        );
-        end component;
+architecture a_maquina_de_estados_tb of maquina_de_estados_tb is
+    component maquina_de_estados
+    port(   clk      : in std_logic;
+            rst      : in std_logic;
+            wr_en    : in std_logic;
+            saida    : out unsigned(0 downto 0)
+    );
+    end component;
 
-        constant period_time : time      := 100 ns;
-        signal   finished    : std_logic := '0';
-        signal   clk, reset, wr_en  : std_logic;
-        signal   saida : unsigned(0 downto 0);
+    constant period_time : time      := 100 ns;
+    signal   finished    : std_logic := '0';
+    signal   clk, reset, wr_en  : std_logic;
+    signal   saida : unsigned(0 downto 0);
 
     begin
         uut: maquina_de_estados port map(
@@ -26,7 +26,7 @@ entity maquina_de_estados_tb is
             wr_en => wr_en,
             saida => saida
         );
-    
+
     reset_global: process
     begin
         reset <= '1';
@@ -34,7 +34,7 @@ entity maquina_de_estados_tb is
         reset <= '0';
         wait;
     end process;
-    
+
     sim_time_proc: process
     begin
         wait for 10 us;         -- <== TEMPO TOTAL DA SIMULAÇÃO!!!
@@ -51,11 +51,11 @@ entity maquina_de_estados_tb is
         end loop;
         wait;
     end process clk_proc;
-   process                      -- sinais dos casos de teste (p.ex.)
-   begin
-      wait for 200 ns;
-      wr_en <= '1';
-      wait for 100 ns; 
-      wait;                     -- <== OBRIGATÓRIO TERMINAR COM WAIT; !!!
-   end process;
+    process                      -- sinais dos casos de teste (p.ex.)
+    begin
+        wait for 200 ns;
+        wr_en <= '1';
+        wait for 100 ns; 
+        wait;                     -- <== OBRIGATÓRIO TERMINAR COM WAIT; !!!
+    end process;    
 end architecture;
