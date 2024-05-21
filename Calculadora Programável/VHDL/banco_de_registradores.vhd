@@ -3,13 +3,13 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity banco_de_registradores is
-    port (  reg_select_1      : in unsigned(2 downto 0);
-            reg_select_2      : in unsigned(2 downto 0);     
-            regWrite          : in unsigned(2 downto 0);
-            entr             : in unsigned(15 downto 0);
-            wr_en             : in std_logic;
-            clk               : in std_logic;
-            rst               : in std_logic;
+    port (  reg_select_1      : in unsigned(2 downto 0) := "000";
+            reg_select_2      : in unsigned(2 downto 0) := "000";     
+            regWrite          : in unsigned(2 downto 0) := "000";
+            entr             : in unsigned(15 downto 0) := "0000000000000000";
+            wr_en             : in std_logic := '1';
+            clk               : in std_logic := '1';
+            rst               : in std_logic := '1';
             reg_data1         : out unsigned(15 downto 0) := "0000000000000000";  
             reg_data2         : out unsigned(15 downto 0) := "0000000000000000" 
     );
@@ -27,7 +27,7 @@ architecture a_banco_de_registradores of banco_de_registradores is
 
     signal data_in: unsigned(15 downto 0) := "0000000000000000";
     signal wr_en1, wr_en2, wr_en3, wr_en4, 
-           wr_en5, wr_en6, wr_en7: std_logic;    
+           wr_en5, wr_en6, wr_en7: std_logic := '0';    
 
     signal data_out0, data_out1, data_out2, data_out3, data_out4, 
            data_out5, data_out6, data_out7: unsigned(15 downto 0) := "0000000000000000";  

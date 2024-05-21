@@ -5,9 +5,9 @@ use ieee.numeric_std.all;
 
 entity constante is
     port(
-        instrucao : in unsigned(6 downto 0);
-        delta_salto_branch : out unsigned(6 downto 0);
-        constante_ula : out unsigned(15 downto 0)
+        instrucao : in unsigned(15 downto 0) := "0000000000000000";
+        delta_salto_branch : out unsigned(6 downto 0) := "0000000";
+        constante_ula : out unsigned(15 downto 0) := "0000000000000000"
     );
 end entity;
 
@@ -16,8 +16,8 @@ architecture a_constate of constante is
     signal delta_salto_branch_signal : unsigned(6 downto 0) := "0000000";
 
     begin
-        constante_ula_signal <= "0000_0000_0" & instrucao;
-        delta_salto_branch_signal <= instrucao;
+        constante_ula_signal <= "000000000" & instrucao(15 downto 9);
+        delta_salto_branch_signal <= instrucao(15 downto 9);
 
         delta_salto_branch <= delta_salto_branch_signal;
         constante_ula <= constante_ula_signal;

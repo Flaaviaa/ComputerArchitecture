@@ -22,6 +22,4 @@ ghdl -e "$arquivo"
 if [[ "$arquivo" == *_tb ]]; then
     # Executa o arquivo elaborado e cria o arquivo de ondas
     ghdl -r "$arquivo" --wave="$arquivo".ghw
-else
-    echo "O arquivo não termina com '_tb', portanto, não será gerado o arquivo de ondas."
 fi

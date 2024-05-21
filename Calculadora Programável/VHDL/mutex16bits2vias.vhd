@@ -8,7 +8,7 @@ entity mutex16bits2vias is
         controle : in std_logic := '0';
         entradazero : in unsigned(15 downto 0) := "0000000000000000";
         entradaum : in unsigned(15 downto 0) := "0000000000000000";
-        saida : out unsigned(15 downto 0)
+        saida : out unsigned(15 downto 0) := "0000000000000000"
     );
 end entity;
 

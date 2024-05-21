@@ -24,20 +24,20 @@ use ieee.numeric_std.all;
 entity opcodedecoder is
     port(
         instrucao : in unsigned(15 downto 0);
-        soma : out std_logic;
-        somaimediata : out std_logic;
-        subtracao : out std_logic;
-        subtracaoimediata : out std_logic;
-        cargaconstante : out std_logic;
-        bneconstante : out std_logic;
-        bneregistradores : out std_logic;
-        branchparaendereco : out std_logic;
-        branchrelativo : out std_logic;
+        soma : out std_logic := '0';
+        somaimediata : out std_logic := '0';
+        subtracao : out std_logic := '0';
+        subtracaoimediata : out std_logic := '0';
+        cargaconstante : out std_logic := '0';
+        beqconstante : out std_logic := '0';
+        beqregistradores : out std_logic := '0';
+        branchparaendereco : out std_logic := '0';
+        branchrelativo : out std_logic := '0';
 
-        registradordestino : out unsigned(3 downto 0);
-        registrador1 : out unsigned(3 downto 0);
-        registrador2 : out unsigned(3 downto 0);
-        constante : out unsigned(4 downto 0)
+        registradordestino : out unsigned(3 downto 0) := "0000";
+        registrador1 : out unsigned(3 downto 0) := "0000";
+        registrador2 : out unsigned(3 downto 0) := "0000";
+        constante : out unsigned(4 downto 0) := "00000"
 
     );
 end entity;
@@ -50,8 +50,8 @@ architecture a_opcodedecoder of opcodedecoder is
     signal subtracao_signal : std_logic;
     signal subtracaoimediata_signal : std_logic;
     signal cargaconstante_signal : std_logic;
-    signal bneconstante_signal : std_logic;
-    signal bneregistradores_signal : std_logic;
+    signal beqconstante_signal : std_logic;
+    signal beqregistradores_signal : std_logic;
     signal branchparaendereco_signal : std_logic;
     signal branchrelativo_signal : std_logic;
     signal registradordestino_signal : unsigned(3 downto 0);
@@ -79,8 +79,8 @@ architecture a_opcodedecoder of opcodedecoder is
 
         cargaconstante_signal <= '1' when opcodepart = "010" else '0';
 
-        bneconstante_signal <= '1' when opcodepart = "100" else '0';
-        bneregistradores_signal <= '1' when opcodepart = "101" else '0';
+        beqconstante_signal <= '1' when opcodepart = "100" else '0';
+        beqregistradores_signal <= '1' when opcodepart = "101" else '0';
         branchparaendereco_signal <= '1' when opcodepart = "110" else '0';
         branchrelativo_signal <= '1' when opcodepart = "111" else '0';
 
@@ -106,8 +106,8 @@ architecture a_opcodedecoder of opcodedecoder is
     subtracaoimediata <= subtracaoimediata_signal;
 
     cargaconstante <= cargaconstante_signal;
-    bneconstante <= bneconstante_signal;
-    bneregistradores <= bneregistradores_signal;
+    beqconstante <= beqconstante_signal;
+    beqregistradores <= beqregistradores_signal;
     branchparaendereco <= branchparaendereco_signal;
     branchrelativo <= branchrelativo_signal;
 

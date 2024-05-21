@@ -3,8 +3,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 -- selectoption - seleciona a operação a ser feita, que são
--- 0 - soma
--- 1 - subtracao
+-- 00 - soma
+-- 01 - subtracao
 -- 10 - a maior que b
 -- 11 - a igual a b
 
@@ -21,20 +21,20 @@ use ieee.numeric_std.all;
 
 entity ULA is
     port (
-        ina : in unsigned(15 downto 0);
-        inb : in unsigned(15 downto 0);
-        operationselect : in unsigned(1 downto 0);
-        carry : out std_logic;
-        overflow : out std_logic;
-        biggest : out std_logic;
-        equal : out std_logic;
-        result : out unsigned(15 downto 0)
+        ina : in unsigned(15 downto 0) := "0000000000000000";
+        inb : in unsigned(15 downto 0) := "0000000000000000";
+        operationselect : in unsigned(1 downto 0) := "00";
+        carry : out std_logic := '0';
+        overflow : out std_logic := '0';
+        biggest : out std_logic := '0';
+        equal : out std_logic := '0';
+        result : out unsigned(15 downto 0) := "0000000000000000"
     );
 end entity;
 
 architecture a_ULA of ULA is
-    signal sub : unsigned(15 downto 0);
-    signal soma : unsigned(15 downto 0);
+    signal sub : unsigned(15 downto 0) := "0000000000000000";
+    signal soma : unsigned(15 downto 0) := "0000000000000000";
 
     begin
 

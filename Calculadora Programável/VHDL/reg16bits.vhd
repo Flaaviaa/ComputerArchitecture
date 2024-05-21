@@ -3,16 +3,16 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity reg16bits is
-    port( clk      : in std_logic;
-          rst      : in std_logic;
-          wr_en    : in std_logic;
-          data_in  : in unsigned(15 downto 0);
-          data_out : out unsigned(15 downto 0)
+    port( clk      : in std_logic := '0';
+          rst      : in std_logic := '0';
+          wr_en    : in std_logic := '0';
+          data_in  : in unsigned(15 downto 0) := "0000000000000000";
+          data_out : out unsigned(15 downto 0) := "0000000000000000"
     );
  end entity;
 
  architecture a_reg16bits of reg16bits is
-    signal registro: unsigned(15 downto 0);
+    signal registro: unsigned(15 downto 0) := "0000000000000000";
  begin
     process(clk,rst,wr_en)  -- acionado se houver mudança em clk, rst ou wr_en
     begin                

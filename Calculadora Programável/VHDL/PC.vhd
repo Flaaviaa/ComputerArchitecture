@@ -2,14 +2,18 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+-- se wr_en =1 então 
+
 entity PC is
     port( 
-         rst      : in std_logic;
-         clk      : in std_logic;
-         wr_en    : in std_logic;
-         saltar  : in std_logic; 
-         endereco_entrada  : in unsigned(6 downto 0);
-         endereco_saida : out unsigned(6 downto 0) := "0000000"
+         rst      : in std_logic := '0';
+         clk      : in std_logic := '0';
+         wr_en    : in std_logic := '0';
+         saltar  : in std_logic := '0';
+         somar : in std_logic := '0';
+         endereco_entrada  : in unsigned(6 downto 0) := "0000000";
+         endereco_saida : out unsigned(6 downto 0) := "0000000";
+         erro_endereco : out std_logic := '0'
     );
  end entity;
 
@@ -27,6 +31,8 @@ entity PC is
                   if saltar = '1' then
                      endereco_saida <= endereco_entrada;
                      atual_registrador <= endereco_entrada;
+                  elsif somar = '1' then
+                     endereco_saida <= prox_registrador - 1 + endereco_entrada;
                   else
                      endereco_saida <= prox_registrador;
                      atual_registrador <= prox_registrador;

@@ -3,15 +3,15 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity maquina_de_estados is
-    port( clk      : in std_logic;
-          rst      : in std_logic;
-          wr_en    : in std_logic;
-          saida    : out unsigned(1 downto 0)
+    port( clk      : in std_logic := '0';
+          rst      : in std_logic := '0';
+          wr_en    : in std_logic := '0';
+          saida    : out unsigned(1 downto 0) := "00"
     );
  end entity;
 
  architecture a_maquina_de_estados of maquina_de_estados is
-    signal estado: unsigned(1 downto 0);
+    signal estado: unsigned(1 downto 0) := "00";
  begin
     process(clk,rst,wr_en)  -- acionado se houver mudança em clk, rst ou wr_en
     begin                

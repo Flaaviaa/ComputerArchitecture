@@ -4,28 +4,28 @@ use ieee.numeric_std.all;
 
 entity rom is
     port(
-        clk         : in std_logic;
-        read_en     : in std_logic;
-        endereco    : in unsigned(6 downto 0);
-        dado        : out unsigned(15 downto 0)
+        clk         : in std_logic := '0';
+        read_en     : in std_logic := '0';
+        endereco    : in unsigned(6 downto 0) := "0000000";
+        dado        : out unsigned(15 downto 0) := "0000000000000000"
     );
 end entity;
 
 architecture a_rom of rom is
     type mem is array (0 to 127) of unsigned(15 downto 0);
     constant conteudo_rom : mem := (
-        0 => "0011000000000001",
-        1 => "1011000000001100",
-        2 => "0001000000100100",
-        3 => "0011001110000000",
-        4 => "1000000000000000",
-        5 => "0000000000100000",
-        6 => "1111000000110000",
-        7 => "0000001110100011",
-        8 => "0011100000100000",
-        9 => "1100000000000100",
-        10 => "0011000000000010",
-
+        -- 0000000 000 000 000 I
+        -- 0 000 000 000 000 000 R
+        -- 0000000 000 000 000 B
+        0 => "0000101000011000", --A
+        1 => "0001000000100000", --B
+        2 => "1000100011101011", --C
+        3 => "0000001101101001", --D
+        4 => "0010100000000110", --E
+        5 => "0000000000101000", --F
+        20 => "0000000101011000",--G
+        21 => "0000010000000110",--H
+        22 => "0000000000011000",--I
         others => (others => '0')
     );
     begin
