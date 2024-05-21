@@ -1,0 +1,39 @@
+-- opcodes possíveis
+  MSB b15                                                                               
+      |
+-- I - 0  0  0  0  0     0  0  0  0      0  0  0  0      0  0  0
+--    |  constante  |   |registrador|    | destino  |    |opcode|
+--
+-- R - 0  0  0  0      0  0  0  0      0  0  0  0     0     0  0  0
+--    |    r2    |    |    r1    |    |  destino |  |soma| |opcode|
+--
+-- B - 0  0  0  0  0     0  0  0  0      0  0  0  0      0  0  0
+--    |constante    |   |   r2    |     |    r1   |      |opcode| 
+
+-- 000 - imediatos soma
+-- 001 - imediatos sub
+-- 010 - lw, salvar constante
+-- 011 (soma = 0) - registradores subtracao
+-- 011 (soma = 1) - registradores soma
+-- 100 - Branch if equal (com constante)
+-- 101 - Branch if equal (com registradores)
+-- 110 - Branch para endereco (constante)
+-- 111 - Branch relativo (constante)
+
+MSB b15                 b0 LSB
+      |                 |
+ADDI: cccc ssss dddd 000
+SUBI: cccc ssss dddd 001
+ADD:  xxxx ssss dddd 0011
+SUB:  xxxx ssss dddd 1011
+BEQ:  cccc ssss dddd 100
+BEQ:  xxxx ssss dddd 101
+BEQ:  cccc ssss dddd 110
+BEQ:  cccc ssss dddd 111
+...
+onde
+
+ddd  identifica o registrador destino
+sss  identifica o registrador fonte
+cccc identifica a constante de 4 bits em complemento de 2
+xxxx é irrelevante

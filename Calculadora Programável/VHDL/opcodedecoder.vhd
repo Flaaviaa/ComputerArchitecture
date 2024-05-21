@@ -16,8 +16,8 @@ use ieee.numeric_std.all;
 -- 010 - lw, salvar constante
 -- 011 (soma = 0) - registradores subtracao
 -- 011 (soma = 1) - registradores soma
--- 100 - Branch if not equal (com constante)
--- 101 - Branch if not equal (com registradores)
+-- 100 - Branch if equal (com constante)
+-- 101 - Branch if equal (com registradores)
 -- 110 - Branch para endereco (constante)
 -- 111 - Branch relativo (constante)
 
