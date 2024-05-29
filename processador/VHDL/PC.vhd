@@ -37,10 +37,7 @@ entity PC is
                      endereco_saida <= prox_registrador;
                      atual_registrador <= prox_registrador;
                   end if;
-
                end if;
-         else 
-            endereco_saida <= "0000000";
          end if;
          if rst= '1' then
             endereco_saida <= "0000000";

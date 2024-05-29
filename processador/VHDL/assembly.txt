@@ -1,0 +1,8 @@
+A:  ADDI 5, r0, r3  -- carrega 5 no reg R3
+B:  ADDI 3, r0, r2  --soma 3 ao registrador 1 que era 0, salva 3 no registrador 2
+C:  ADD r2, r3, r5  --soma r3 com r2 e salva no r5(8)
+D:  BEQ r2, r3, r4  -- compara o valor do r2 e r3 até que sejam iguais e salva no r4
+    SUB  5, r2, r3  -- subtrai 5 do r2 (8) e salva (3) no r3
+E:  ADDI 5, r0, r1  -- carrega 5 no reg R1
+F:  BEQ r2, r3, r1  -- pula 5 registradores, seria o salto condicional relativo
+G:  BEQ r1, 5,  r2  -- condicional absoluto com constante
