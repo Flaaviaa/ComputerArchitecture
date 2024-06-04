@@ -1,46 +1,35 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
--- opcodes possíveis
--- I - 0  0  0  0  0  0  0      0  0  0         0  0  0        0  0  0
---    |      constante    |   |registrador|    | destino  |    |opcode|
---
--- R -   0    000    0  0  0        0  0  0       0  0  0      0  0  0
---    |soma|        |  r2   |      |   r1  |    |  destino |   |opcode|
---
--- B - 0  0  0  0  0  0  0      0  0  0       0  0  0      0  0  0
---    |      constante    |    |  r2  |      |  r1   |     |opcode| 
 
--- OPCODE
--- 000 - imediatos soma
--- 001 - imediatos sub
--- 010 - lw, salvar constante
--- 011 (soma = 0) - registradores subtracao
--- 011 (soma = 1) - registradores soma
--- 100 - Branch if equal (com constante)
--- 101 - Branch if equal (com registradores)
--- 110 - Branch para endereco (constante)
--- 111 - Branch relativo (constante)
+-- tem que configurar o wr_en pra quando for para o acc e para o banco de regs
 
--- ULA
--- 00 - soma
--- 01 - subtracao
--- 10 - a maior que b
--- 11 - a igual a b
-
+-- 
 entity UC is
     port(
         instrucao : in unsigned(15 downto 0) := "0000000000000000";
-        select_mux_input_regs : out std_logic := '1'; -- 
+        rst : in std_logic := '0';
+        -- PC
+        instrucao_branch : out std_logic := '0';
+        instrucao_jump : out std_logic := '0';
+        select_mux_pc : out unsigned(1 downto 0) := "00";
+        instrucao_jumpbit5 : out std_logic := '0';
+        wr_en_pc : out std_logic := '1';
+        -- ULA
         select_ula_op : out unsigned(1 downto 0) := "00";
-        select_mux_ula : out std_logic := '1'; -- seleciona 1 para constante e 0 para registrador
-        instrucao_beq : out std_logic := '1';
-        instrucao_salto_relativo : out std_logic := '1';
-
+        instrucao_zera_ula : out std_logic := '0';
+        select_mux_ula : out std_logic := '0'; -- seleciona 1 para constante e 0 para registrador
+        -- REG
         reg_wr_en : out std_logic := '1'; 
         selec_reg1 : out unsigned(2 downto 0) := "000";
-        selec_reg2 : out unsigned(2 downto 0) := "000";
-        registrador_para_salvar : out unsigned(2 downto 0) := "000"
+        registrador_para_salvar : out unsigned(2 downto 0) := "000";
+        select_mux_input_regs : out std_logic := '1';
+        -- ACC
+        acc_wr_en : out std_logic := '0';
+        select_mux_acc : out unsigned(1 downto 0) := "00";
+        -- ERROS
+        erro_instrucao : out unsigned(3 downto 0) := "0000";
+        brake : out std_logic := '0'
     );
 end entity;
 
@@ -48,64 +37,86 @@ architecture a_UC of UC is
     signal select_mux_input_regs_signal : std_logic := '1';
     signal select_ula_op_signal : unsigned(1 downto 0) := "00";
     signal select_mux_ula_signal : std_logic := '0'; -- seleciona 1 para constante e 0 para registrador
-    signal instrucao_beq_signal : std_logic := '0';
-    signal instrucao_salto_relativo_signal : std_logic := '0';
+    signal instrucao_branch_signal : std_logic := '0';
 
-    signal reg_wr_en_signal : std_logic := '0'; 
     signal selec_reg1_signal : unsigned(2 downto 0) := "000";
-    signal selec_reg2_signal : unsigned(2 downto 0) := "000";
-    signal registrador_para_salvar_signal : unsigned(2 downto 0) := "000";
     signal opcode : unsigned(2 downto 0) := "000";
 
-    signal tipoI : std_logic := '0';
-    signal tipoR : std_logic := '0';
-    signal tipoB : std_logic := '0';
+    signal sistema : std_logic := '0';
+    signal add : std_logic := '0';
+    signal addi : std_logic := '0';
+    signal sub : std_logic := '0';
+    signal mov : std_logic := '0';
+    signal ld : std_logic := '0';
+    signal jump : std_logic := '0';
+    signal branch : std_logic := '0';
+    signal comparar : std_logic := '0';
 
-
-
+    signal reg_on : std_logic := '0';
+    signal acc_on : std_logic := '0';
     begin
-        opcode <= instrucao(2 downto 0);
+        opcode <= instrucao(15 downto 13);
 
-        tipoR <= '1' when opcode = "011" else '0';
-        tipoI <= '1' when opcode = "000" or opcode = "001" or opcode = "010"  else '0';
-        tipoB <= '1' when opcode = "100" or opcode = "101" or opcode = "110" or opcode = "111" else '0';
+        -- instrucoes 
+            sistema <= '1' when opcode = "000" else '0';
+            add <= '1' when opcode = "001" else '0';
+            addi <= '1' when opcode = "010" else '0';
+            sub <= '1' when opcode = "011" else '0';
+            mov <= '1' when opcode = "100" else '0';
+            ld <= '1' when opcode = "101" else '0';
+            jump <= '1' when opcode = "110" and instrucao(10) = '0' else '0';
+            branch <= '1' when opcode = "110" and instrucao(10) = '1' else '0';
+            comparar <= '1' when opcode = "111" else '0';
 
-        instrucao_salto_relativo_signal <= '1' when opcode = "111" else '0';
+            instrucao_branch <= branch;
+            instrucao_jump <= jump;
+            instrucao_zera_ula <= comparar;
 
-        select_ula_op_signal    <=      "00" when (opcode = "011" and instrucao(15) = '1') or opcode = "000" else
-                                        "01" when (opcode = "011" and instrucao(15) = '0') or opcode = "001" else
-                                        "11" when opcode = "100" or opcode = "101" or opcode = "110" or opcode = "111" else "00";
+            brake <=    '1' when sistema = '1' and instrucao(12 downto 10) > "000" else '0';
 
-        select_mux_ula_signal <=        '1' when opcode = "000" or opcode = "001" 
-                                            or opcode = "101" else
-                                        '0';
 
-        reg_wr_en_signal <=             '1' when opcode = "000" or opcode = "001" or opcode = "011" else
-                                        '0';
-        -- por equanti fica esse valor até ter uma RAM
-        select_mux_input_regs_signal <= '1';
-        -- quando é operacao I ou R salva em um registrador
-        registrador_para_salvar_signal <=      instrucao(5 downto 3) when tipoR = '1' or tipoI = '1' else "000";
-        -- registrador um a ser operado pela ula
-        selec_reg1_signal <=            instrucao(8 downto 6) when tipoR = '1' or tipoI = '1' else
-                                        instrucao(5 downto 3) when tipoB = '1' else
-                                         "000";
-        -- segundo registrador a ser operado
-        selec_reg2_signal <=           instrucao(11 downto 9) when tipoR = '1' else
-                                        instrucao(8 downto 6) when tipoB ='1' else
-                                        "000";
-        -- a constante é instanciada pela entidade constante
-        -- 
-        instrucao_beq_signal <=  '1' when opcode = "100" or opcode = "101" or opcode = "110" else '0';
+            reg_wr_en <=    '1' when mov = '1' and instrucao(8) = '0' else
+                            '1' when ld = '1' and instrucao(8) = '0' else
+                            '0';
 
-        select_mux_input_regs <= select_mux_input_regs_signal;
-        select_ula_op <= select_ula_op_signal;
-        select_mux_ula <= select_mux_ula_signal;
-        instrucao_beq <= instrucao_beq_signal;
-        reg_wr_en <= reg_wr_en_signal;
-        selec_reg1 <= selec_reg1_signal;
-        selec_reg2 <= selec_reg2_signal;
-        registrador_para_salvar <= registrador_para_salvar_signal;
-        instrucao_salto_relativo <= instrucao_salto_relativo_signal;
+            acc_wr_en <=    '1' when mov = '1' and instrucao(8) = '1' else
+                            '1' when ld = '1' and instrucao(8) = '1' else
+                            '1' when add = '1' or addi = '1' or sub = '1' else
+                            '0';
+
+            select_mux_input_regs <= '1' when ld = '1' else '0';
+            
+            select_ula_op <=    "00" when add = '1' else
+                                "01" when sub = '1' else
+                                "10" when comparar = '1' and instrucao(10) = '1' else
+                                "11" when comparar = '1' and instrucao(10) = '0' else "00";
+
+            select_mux_ula <=   '1' when addi = '1' else '0';
+
+            select_mux_acc <=   "00" when mov = '1' else
+                                "10" when ld = '1' else
+                                "01" when add = '1' or addi = '1' or sub = '1' else "00";
+            
+            select_mux_pc <=    "01" when branch = '1' and instrucao(12 downto 11) = "11" else
+                                "10" when branch = '1' and instrucao(12 downto 11) = "10" else
+                                "11" when branch = '1' and instrucao(12 downto 11) = "01" else
+                                "00";
+
+            selec_reg1 <=       instrucao(11 downto 9) when add = '1' or addi = '1' or sub = '1' or mov = '1' or ld = '1'else "000";
+
+            instrucao_jumpbit5 <= '1' when comparar = '1' and instrucao(12 downto 11) = "01" else '0';
+            registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";
+        -- erros de opcode
+            erro_instrucao <=   "0001" when sistema ='1' and instrucao(8 downto 0) > B"000_000_000" else
+                                "0010" when add ='1' and instrucao(8 downto 6) > "000" else
+                                "0011" when addi ='1' and instrucao(11 downto 8) > "0000" else
+                                "0100" when sub ='1' and instrucao(8 downto 6) > "000" else
+                                "0101" when mov ='1' and instrucao(7 downto 0) > B"0000_0000" else
+                                "0110" when ld ='1' and (instrucao(12) = '1' and instrucao(11 downto 9) > "000")else
+                                "0111" when jump ='1' and instrucao(9 downto 7) > "000" else
+                                "1000" when branch ='1' and instrucao(9 downto 7) > "000" else
+                                "1001" when comparar ='1' and (instrucao(10 downto 7) > "0000")else
+                                "0000";
+
 
 end architecture;

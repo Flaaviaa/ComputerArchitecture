@@ -10,25 +10,23 @@ entity FATCH_PACKAGE is
         estado : in unsigned(1 downto 0);
         -- entrada
         fet_wr_en_pc : in std_logic;
-        fet_somar_pc : in std_logic;
-        fet_saltar_pc : in std_logic;
-        fet_endereco_entrada_pc : in unsigned(6 downto 0);
-        fet_overflow_flag_ula : in std_logic;
         fet_instrucao_branch : in std_logic;
+        fet_instrucao_jump : in std_logic;
+        fet_saida_mux_pc_ou_bit5 : in std_logic;
+        fet_saida_mux_pc : in std_logic;
+        fet_endereco_entrada_pc : in unsigned(6 downto 0);
         -- saída
-        fet_instrucao : out unsigned(15 downto 0)
+        fet_instrucao : out unsigned(15 downto 0);
+        fet_erro_endereco : out std_logic
     );
 end entity;
 
 
 architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
-
     signal PC_wr_en : std_logic := '0';
     signal PC_saltar : std_logic := '0';
     signal PC_somar : std_logic := '0';
-    signal PC_endereco_entrada : unsigned(6 downto 0) := "0000000";
     signal PC_endereco_saida : unsigned(6 downto 0) := "0000000";
-    signal PC_erro_endereco : std_logic := '0';
 
     signal ROM_read_en  : std_logic;
     signal ROM_endereco : unsigned(6 downto 0);
@@ -36,7 +34,6 @@ architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
 
     signal REG_wr_en    : std_logic;
     signal REG_data_in  : unsigned(15 downto 0);
-    signal REG_data_out : unsigned(15 downto 0);
 
     component PC is
         port(
@@ -80,9 +77,9 @@ architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
         wr_en => PC_wr_en,
         saltar => PC_saltar,
         somar => PC_somar,
-        endereco_entrada => PC_endereco_entrada,
+        endereco_entrada => fet_endereco_entrada_pc,
         endereco_saida => PC_endereco_saida,
-        erro_endereco => PC_erro_endereco
+        erro_endereco => fet_erro_endereco
         );
 
     rom_instance : rom port map(
@@ -101,13 +98,14 @@ architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
         );  
 
         -- conexoes
-        PC_endereco_entrada <= fet_endereco_entrada_pc;
         ROM_endereco <= PC_endereco_saida;
         REG_data_in <= ROM_dado;
-        PC_wr_en <= fet_wr_en_pc;
-        PC_somar <= fet_somar_pc;
-        -- condicoes
-        PC_saltar <= '1' when fet_overflow_flag_ula = '1' and fet_instrucao_branch = '1' else '0';
+        -- porta logica de saltar
+        PC_saltar <= '1' when fet_saida_mux_pc_ou_bit5 = '1' and fet_instrucao_jump = '1' else '0';
+        -- porta logica de somar
+        PC_somar <= '1' when fet_saida_mux_pc = '1' and fet_instrucao_branch = '1' else '0';
+
+
         -- estados
         PC_wr_en <= '1' when estado = "10" else '0';
         ROM_read_en <= '1' when estado = "00" else '0';
