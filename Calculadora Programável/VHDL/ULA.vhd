@@ -24,7 +24,7 @@ entity ULA is
         ina : in unsigned(15 downto 0) := "0000000000000000";
         inb : in unsigned(15 downto 0) := "0000000000000000";
         operationselect : in unsigned(1 downto 0) := "00";
-        carry : out std_logic := '0';
+        zeraflag : in std_logic := '0';
         overflow : out std_logic := '0';
         biggest : out std_logic := '0';
         equal : out std_logic := '0';
@@ -42,12 +42,10 @@ architecture a_ULA of ULA is
 
         sub <= ina - inb;
 
-        result <=   soma when operationselect = "00" else
+        result <=   "0000000000000000" when zeraflag = '1' else
+                    soma when operationselect = "00" else
                     sub when operationselect = "01" else
                     "0000000000000000";
-
-        carry <=    '1' when operationselect = "00" and ( ina(15) = '0' and inb(15) = '0' and soma(15) = '1') else
-                    '0';
 
         overflow <= '1' when operationselect = "01" and ( ina(15) = '1' and inb(15) = '0' and sub(15) = '0') else
                     '0';
