@@ -17,7 +17,6 @@ entity UC is
         wr_en_pc : out std_logic := '1';
         -- ULA
         select_ula_op : out unsigned(1 downto 0) := "00";
-        instrucao_zera_ula : out std_logic := '0';
         select_mux_ula : out std_logic := '0'; -- seleciona 1 para constante e 0 para registrador
         -- REG
         reg_wr_en : out std_logic := '1'; 
@@ -29,7 +28,11 @@ entity UC is
         select_mux_acc : out unsigned(1 downto 0) := "00";
         -- ERROS
         erro_instrucao : out unsigned(3 downto 0) := "0000";
-        brake : out std_logic := '0'
+        brake : out std_logic := '0';
+        -- REG FLAGS E REGISTRADOR DA ULA
+        regflags_wr_en : out std_logic := '0';
+        regula_wr_en : out std_logic := '0'
+
     );
 end entity;
 
@@ -70,7 +73,8 @@ architecture a_UC of UC is
 
             instrucao_branch <= branch;
             instrucao_jump <= jump;
-            instrucao_zera_ula <= comparar;
+            regflags_wr_en <= comparar;
+            regula_wr_en <= '1' when add = '1' or addi = '1' or sub = '1' else '0';
 
             brake <=    '1' when sistema = '1' and instrucao(12 downto 10) > "000" else '0';
 
@@ -91,18 +95,17 @@ architecture a_UC of UC is
                                 "10" when comparar = '1' and instrucao(10) = '1' else
                                 "11" when comparar = '1' and instrucao(10) = '0' else "00";
 
-            select_mux_ula <=   '1' when addi = '1' else '0';
+            select_mux_ula <=   '1' when addi = '1' or (comparar = '1' and instrucao(12 downto 11) = "00") else '0';
 
             select_mux_acc <=   "00" when mov = '1' else
                                 "10" when ld = '1' else
                                 "01" when add = '1' or addi = '1' or sub = '1' else "00";
             
-            select_mux_pc <=    "01" when branch = '1' and instrucao(12 downto 11) = "11" else
-                                "10" when branch = '1' and instrucao(12 downto 11) = "10" else
-                                "11" when branch = '1' and instrucao(12 downto 11) = "01" else
-                                "00";
+            select_mux_pc <=    instrucao(12 downto 11) when jump = '1' or branch = '1' else "00";
 
-            selec_reg1 <=       instrucao(11 downto 9) when add = '1' or addi = '1' or sub = '1' or mov = '1' or ld = '1'else "000";
+            selec_reg1 <=       instrucao(11 downto 9) when add = '1' or addi = '1' or sub = '1' or mov = '1' or ld = '1'else
+                                instrucao(9 downto 7) when comparar = '1' and instrucao(12 downto 11) = "01" else
+                                "000";
 
             instrucao_jumpbit5 <= '1' when comparar = '1' and instrucao(12 downto 11) = "01" else '0';
             registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";
@@ -117,6 +120,8 @@ architecture a_UC of UC is
                                 "1000" when branch ='1' and instrucao(9 downto 7) > "000" else
                                 "1001" when comparar ='1' and (instrucao(10 downto 7) > "0000")else
                                 "0000";
+
+            brake <= '1' when sistema = '1' and instrucao(12 downto 10) = "011" else '0';
 
 
 end architecture;

@@ -14,7 +14,6 @@ entity ULA is
     port (
         ina : in unsigned(15 downto 0) := "0000000000000000";
         inb : in unsigned(15 downto 0) := "0000000000000000";
-        operacaozeraula :in std_logic := '0';
         operationselect : in unsigned(1 downto 0) := "00";
         overflow : out std_logic := '0';
         biggest : out std_logic := '0';
@@ -29,7 +28,7 @@ architecture a_ULA of ULA is
     signal salvo_overflow,salvo_biggest,salvo_equal : std_logic := '0';
     signal sub : unsigned(16 downto 0) := "00000000000000000";
     signal soma : unsigned(16 downto 0) := "00000000000000000";
-
+    signal operacaozeraula : std_logic := '0';
     begin
         sing_ina <= '0' & ina;
 
@@ -38,6 +37,8 @@ architecture a_ULA of ULA is
         soma <= sing_ina + sing_inb;
 
         sub <= sing_ina - sing_inb;
+
+        operacaozeraula <= '1' when operationselect = "10" or operationselect = "11" else '0';
 
         result <=   soma(15 downto 0) when operationselect = "00" else
                     sub(15 downto 0) when operationselect = "01" else
@@ -58,11 +59,7 @@ architecture a_ULA of ULA is
                             '0';
 
         overflow <= signal_overflow ;
-        biggest <= signal_biggest when operacaozeraula = '1' else '0'; --salvo_biggest;
-        equal <= signal_equal when operacaozeraula = '1' else '0';--salvo_equal;
-
-        -- overflow <= salvo_overflow;
-        -- biggest <= salvo_biggest;
-        -- equal <= salvo_equal;
+        biggest <= signal_biggest when operacaozeraula = '1' else '0';
+        equal <= signal_equal when operacaozeraula = '1' else '0';
 
     end architecture;

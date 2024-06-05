@@ -1,0 +1,23 @@
+A : R3 <= 0
+- LD R3,0;
+
+B: R4 <= 0
+- LD R4,0;
+
+C: R4 <= R3 + R4
+- MOV A,R3;
+- ADD A,R4;
+- MOV R4,A;
+
+D: R3 <= R3 + 1
+- MOV A,R3;
+- ADDI A,1;
+- MOV R3,A;
+
+E: se R3 < 30 , JUMP para C*
+- COMP A,30;
+- JUMP BG,2;
+
+F: R5 <= R4
+- MOV A,R4;
+- MOV R5,A;

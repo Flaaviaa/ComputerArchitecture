@@ -17,26 +17,27 @@ entity DECODER_PACKAGE is
         endereco_pc : out unsigned(6 downto 0);
         instrucao_branch : out std_logic;
         instrucao_jump : out std_logic;
-        instrucao_zera_flags_ula : out std_logic;
         instrucao_jumpbit5 : out std_logic;
         ina_ula : out unsigned(15 downto 0);
         inb_ula : out unsigned(15 downto 0);
         select_op_ula : out unsigned(1 downto 0);
         select_mux_pc : out unsigned(1 downto 0);
         instrucao_erro : out unsigned(3 downto 0);
-        brake_erro : out std_logic
+        brake : out std_logic;
 
+        regflags_wr_en : out std_logic;
+        regula_wr_en : out std_logic
     );
 end entity;
 
 
 architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
-
+    signal UC_regflags_wr_en : std_logic := '0'; 
+    signal UC_regula_wr_en : std_logic := '0'; 
     
     signal UC_instrucao : unsigned(15 downto 0) := "0000000000000000";
     signal UC_select_mux_regs : std_logic := '1';
     signal UC_select_ula_op : unsigned(1 downto 0) := "00";
-    signal UC_instrucao_zera_ula : std_logic := '0';
     signal UC_select_mux_ula : std_logic := '0';
     signal UC_instrucao_branch : std_logic := '0';
     signal UC_instrucao_jump : std_logic := '0';
@@ -90,7 +91,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             instrucao_jumpbit5 : out std_logic := '0';
             wr_en_pc : out std_logic;
             select_ula_op : out unsigned(1 downto 0);
-            instrucao_zera_ula : out std_logic;
             select_mux_ula : out std_logic; 
             reg_wr_en : out std_logic; 
             selec_reg1 : out unsigned(2 downto 0);
@@ -99,7 +99,9 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             acc_wr_en : out std_logic;
             select_mux_acc : out unsigned(1 downto 0);
             erro_instrucao : out unsigned(3 downto 0);
-            brake : out std_logic
+            brake : out std_logic;
+            regflags_wr_en : out std_logic;
+            regula_wr_en : out std_logic
         );
     end component;
     component constante is
@@ -159,7 +161,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         instrucao_jumpbit5 => instrucao_jumpbit5,
         wr_en_pc => wr_en_pc,
         select_ula_op => UC_select_ula_op,
-        instrucao_zera_ula => UC_instrucao_zera_ula,
         select_mux_ula => UC_select_mux_ula,
         reg_wr_en => UC_reg_wr_en,
         selec_reg1 => UC_selec_reg1,
@@ -168,7 +169,9 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         acc_wr_en => UC_acc_wr_en,
         select_mux_acc => UC_select_mux_acc,
         erro_instrucao => instrucao_erro,
-        brake => brake_erro
+        brake => brake,
+        regflags_wr_en => UC_regflags_wr_en,
+        regula_wr_en => UC_regula_wr_en
         );
     constante_instance : constante port map(
         instrucao => constante_instrucao,
@@ -222,6 +225,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     
     reg_wr_en <= '1' when UC_reg_wr_en = '1' and estado = "10" else '0' ;
     acc_wr_en <= '1' when UC_acc_wr_en = '1' and estado = "10" else '0';
+    regflags_wr_en <= '1' when UC_regflags_wr_en = '1' and estado = "00" else '0';
+    regula_wr_en <= '1' when UC_regula_wr_en = '1' and estado = "00" else '0';
     -- conexao mutexes
         -- mutex acumulador
         mux_acc_controle <= UC_select_mux_acc;
@@ -245,7 +250,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     -- conexao Uni Controle
         UC_instrucao <= instrucao;
         select_op_ula <= UC_select_ula_op;
-        instrucao_zera_flags_ula <= UC_instrucao_zera_ula;
         -- UC_instrucao_beq
         instrucao_branch <= UC_instrucao_branch;
         instrucao_jump <= UC_instrucao_jump;
