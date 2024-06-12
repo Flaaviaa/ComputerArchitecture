@@ -21,7 +21,7 @@ entity ram_tb is
    signal dado_in : unsigned(15 downto 0);
    signal wr_en, reset : std_logic;
    signal clk : std_logic := '0';
-   signal dado_out : unsigned(15 downto 0) := "0000000000000000";
+   signal dado_out : unsigned(15 downto 0) := B"0000_0000_0000_0000";
    constant period_time : time      := 100 ns;
    signal   finished    : std_logic := '0';
 

@@ -32,7 +32,8 @@ entity UC is
         -- REG FLAGS E REGISTRADOR DA ULA
         regflags_wr_en : out std_logic := '0';
         regula_wr_en : out std_logic := '0'
-
+        -- RAM
+        ram_wr_en : out std_logic
     );
 end entity;
 
@@ -109,6 +110,7 @@ architecture a_UC of UC is
 
             instrucao_jumpbit5 <= '1' when comparar = '1' and instrucao(12 downto 11) = "01" else '0';
             registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";
+            ram_wr_en <= '1' when addi = '1' --instrucao?;
         -- erros de opcode
             erro_instrucao <=   "0001" when sistema ='1' and instrucao(8 downto 0) > B"000_000_000" else
                                 "0010" when add ='1' and instrucao(8 downto 6) > "000" else

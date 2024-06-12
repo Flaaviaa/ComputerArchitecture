@@ -81,6 +81,10 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     signal mux_acc_entradadois : unsigned(15 downto 0) := "0000000000000000";
     signal mux_acc_saida : unsigned(15 downto 0):= "0000000000000000";
 
+    signal ram_wr_en      : std_logic;
+    signal ram_in         : unsigned (6 downto 0);
+    signal ram_out        : unsigned (15 downto 0);
+
     component UC is
         port(
             instrucao : in unsigned(15 downto 0);
@@ -101,7 +105,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             erro_instrucao : out unsigned(3 downto 0);
             brake : out std_logic;
             regflags_wr_en : out std_logic;
-            regula_wr_en : out std_logic
+            regula_wr_en : out std_logic;
+            ram_wr_en : out std_logic
         );
     end component;
     component constante is
@@ -150,6 +155,15 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             saida : out unsigned(15 downto 0) := "0000000000000000"
         );
     end component;
+    component ram is
+        port (
+            clk      : in std_logic;
+            endereco : in unsigned(6 downto 0);
+            wr_en    : in std_logic;
+            dado_in  : in unsigned(15 downto 0);
+            dado_out : out unsigned(15 downto 0)
+        );
+    end component;
 
     begin
     UC_instance : UC port map(
@@ -171,7 +185,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         erro_instrucao => instrucao_erro,
         brake => brake,
         regflags_wr_en => UC_regflags_wr_en,
-        regula_wr_en => UC_regula_wr_en
+        regula_wr_en => UC_regula_wr_en,
+        ram_wr_en => ram_wr_en
         );
     constante_instance : constante port map(
         instrucao => constante_instrucao,
@@ -221,6 +236,14 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         entradadois => mux_acc_entradadois,
         saida => mux_acc_saida
         );
+
+    ram_instance: ram port map (
+        clk      => clk,
+        endereco => ram_in,
+        wr_en    => ram_wr_en,
+        dado_in  => reg_data2,
+        dado_out => ram_out
+        );
     
     
     reg_wr_en <= '1' when UC_reg_wr_en = '1' and estado = "10" else '0' ;
@@ -258,6 +281,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     bit5 <= reg_data1(5);
     constante_instrucao <= instrucao;
     endereco_pc <= constante_delta_salto_branch;
+    -- RAM
+    ram_in <= reg_data2;
 
 
 end architecture;
