@@ -40,12 +40,10 @@ architecture A_PROCESSADOR of PROCESSADOR is
     signal fet_wr_en_pc : std_logic := '0';
     signal fet_instrucao_branch : std_logic := '0';
     signal fet_instrucao_jump : std_logic := '0';
-    signal fet_saida_mux_pc_ou_bit5 : std_logic := '0';
     signal fet_saida_mux_pc : std_logic := '0';
     signal fet_endereco_entrada_pc : unsigned(6 downto 0) := "0000000";
     signal fet_instrucao : unsigned(15 downto 0) := "0000000000000000";
 
-    signal exe_instrucao_jumpbi5 : std_logic := '0';
     signal exe_select_mux_pc : unsigned(1 downto 0) := "00";
     signal exe_select_op_ula : unsigned(1 downto 0) := "00";
     signal exe_ina_ula : unsigned(15 downto 0) := "0000000000000000";
@@ -80,7 +78,6 @@ architecture A_PROCESSADOR of PROCESSADOR is
             fet_wr_en_pc : in std_logic;
             fet_instrucao_branch : in std_logic;
             fet_instrucao_jump : in std_logic;
-            fet_saida_mux_pc_ou_bit5 : in std_logic;
             fet_saida_mux_pc : in std_logic;
             fet_endereco_entrada_pc : in unsigned(6 downto 0);
             fet_instrucao : out unsigned(15 downto 0);
@@ -92,7 +89,6 @@ architecture A_PROCESSADOR of PROCESSADOR is
             clk : in std_logic;
             rst : in std_logic;
             estado : in unsigned(1 downto 0);
-            exe_instrucao_jumpbi5 : in std_logic;
             exe_select_mux_pc : in unsigned(1 downto 0);
             exe_select_op_ula : in unsigned(1 downto 0);
             exe_ina_ula : in unsigned(15 downto 0);
@@ -102,8 +98,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_regula_wr_en : in std_logic;
             exe_result_ula : out unsigned(15 downto 0);
             exe_saida_mux_pc : out std_logic;
-            exe_saida_reg : out unsigned(15 downto 0);
-            exe_saida_mux_pc_ou_bit5 : out std_logic
+            exe_saida_reg : out unsigned(15 downto 0)
         
         );
     end component;
@@ -119,7 +114,6 @@ architecture A_PROCESSADOR of PROCESSADOR is
             endereco_pc : out unsigned(6 downto 0);
             instrucao_branch : out std_logic;
             instrucao_jump : out std_logic;
-            instrucao_jumpbit5 : out std_logic;
             ina_ula : out unsigned(15 downto 0);
             inb_ula : out unsigned(15 downto 0);
             select_op_ula : out unsigned(1 downto 0);
@@ -139,7 +133,6 @@ architecture A_PROCESSADOR of PROCESSADOR is
             fet_wr_en_pc => fet_wr_en_pc,
             fet_instrucao_branch => fet_instrucao_branch,
             fet_instrucao_jump => fet_instrucao_jump,
-            fet_saida_mux_pc_ou_bit5 => fet_saida_mux_pc_ou_bit5,
             fet_saida_mux_pc => fet_saida_mux_pc,
             fet_endereco_entrada_pc => fet_endereco_entrada_pc,
             fet_instrucao => fet_instrucao,
@@ -156,7 +149,6 @@ architecture A_PROCESSADOR of PROCESSADOR is
             endereco_pc => endereco_pc,
             instrucao_branch => instrucao_branch,
             instrucao_jump => instrucao_jump,
-            instrucao_jumpbit5 => instrucao_jumpbit5,
             ina_ula => ina_ula,
             inb_ula => inb_ula,
             select_op_ula => select_op_ula,
@@ -170,7 +162,6 @@ architecture A_PROCESSADOR of PROCESSADOR is
             clk => clk_controled,
             rst => rst,
             estado => estado,
-            exe_instrucao_jumpbi5 => exe_instrucao_jumpbi5,
             exe_select_mux_pc => exe_select_mux_pc,
             exe_select_op_ula => exe_select_op_ula,
             exe_ina_ula => exe_ina_ula,
@@ -180,8 +171,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_regula_wr_en => exe_regula_wr_en,
             exe_result_ula => exe_result_ula,
             exe_saida_reg => exe_saida_reg,
-            exe_saida_mux_pc => exe_saida_mux_pc,
-            exe_saida_mux_pc_ou_bit5 => exe_saida_mux_pc_ou_bit5
+            exe_saida_mux_pc => exe_saida_mux_pc
         );
         -- conectar cabos =(
             brake <= signal_brake;
@@ -195,14 +185,12 @@ architecture A_PROCESSADOR of PROCESSADOR is
             fet_endereco_entrada_pc <= endereco_pc;
             fet_instrucao_branch <= instrucao_branch;
             fet_instrucao_jump <= instrucao_jump;
-            fet_saida_mux_pc_ou_bit5 <= exe_saida_mux_pc_ou_bit5;
             fet_saida_mux_pc <= exe_saida_mux_pc;
 
             exe_select_mux_pc <= select_mux_pc;
             exe_select_op_ula <= select_op_ula;
             exe_ina_ula <= ina_ula;
             exe_inb_ula <= inb_ula;
-            exe_instrucao_jumpbi5 <= instrucao_jumpbit5;
             exe_bit5 <= bit5;
 
             -- ula_ina <= ina_ula;

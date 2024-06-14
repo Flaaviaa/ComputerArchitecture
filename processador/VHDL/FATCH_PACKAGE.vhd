@@ -12,7 +12,6 @@ entity FATCH_PACKAGE is
         fet_wr_en_pc : in std_logic;
         fet_instrucao_branch : in std_logic;
         fet_instrucao_jump : in std_logic;
-        fet_saida_mux_pc_ou_bit5 : in std_logic;
         fet_saida_mux_pc : in std_logic;
         fet_endereco_entrada_pc : in unsigned(6 downto 0);
         -- saída
@@ -101,7 +100,7 @@ architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
         ROM_endereco <= PC_endereco_saida;
         REG_data_in <= ROM_dado;
         -- porta logica de saltar
-        PC_saltar <= '1' when fet_saida_mux_pc_ou_bit5 = '1' and fet_instrucao_jump = '1' else '0';
+        PC_saltar <= '1' when fet_saida_mux_pc = '1' and fet_instrucao_jump = '1' else '0';
         -- porta logica de somar
         PC_somar <= '1' when fet_saida_mux_pc = '1' and fet_instrucao_branch = '1' else '0';
 

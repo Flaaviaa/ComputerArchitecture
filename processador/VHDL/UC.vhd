@@ -13,7 +13,6 @@ entity UC is
         instrucao_branch : out std_logic := '0';
         instrucao_jump : out std_logic := '0';
         select_mux_pc : out unsigned(1 downto 0) := "00";
-        instrucao_jumpbit5 : out std_logic := '0';
         wr_en_pc : out std_logic := '1';
         -- ULA
         select_ula_op : out unsigned(1 downto 0) := "00";
@@ -67,13 +66,13 @@ architecture a_UC of UC is
             sub <= '1' when opcode = "011" else '0';
             mov <= '1' when opcode = "100" else '0';
             ld <= '1' when opcode = "101" else '0';
-            jump <= '1' when opcode = "110" and instrucao(10) = '0' else '0';
-            branch <= '1' when opcode = "110" and instrucao(10) = '1' else '0';
+            jump <= '1' when opcode = "110" and instrucao(12) = '0' else '0';
+            branch <= '1' when opcode = "110" and instrucao(12) = '1' else '0';
             comparar <= '1' when opcode = "111" else '0';
 
             instrucao_branch <= branch;
             instrucao_jump <= jump;
-            regflags_wr_en <= comparar;
+            regflags_wr_en <= '1' when comparar = '1' or add = '1' or addi = '1' or sub = '1';
             regula_wr_en <= '1' when add = '1' or addi = '1' or sub = '1' else '0';
 
             brake <=    '1' when sistema = '1' and instrucao(12 downto 10) > "000" else '0';
@@ -95,19 +94,18 @@ architecture a_UC of UC is
                                 "10" when comparar = '1' and instrucao(10) = '1' else
                                 "11" when comparar = '1' and instrucao(10) = '0' else "00";
 
-            select_mux_ula <=   '1' when addi = '1' or (comparar = '1' and instrucao(12 downto 11) = "00") else '0';
+            select_mux_ula <=   '1' when addi = '1' or (comparar = '1' and instrucao(11 downto 10) = "00") else '0';
 
             select_mux_acc <=   "00" when mov = '1' else
                                 "10" when ld = '1' else
                                 "01" when add = '1' or addi = '1' or sub = '1' else "00";
             
-            select_mux_pc <=    instrucao(12 downto 11) when jump = '1' or branch = '1' else "00";
+            select_mux_pc <=    instrucao(11 downto 10) when jump = '1' or branch = '1' else "00";
 
             selec_reg1 <=       instrucao(11 downto 9) when add = '1' or addi = '1' or sub = '1' or mov = '1' or ld = '1'else
-                                instrucao(9 downto 7) when comparar = '1' and instrucao(12 downto 11) = "01" else
+                                instrucao(9 downto 7) when comparar = '1' and instrucao(11 downto 10) = "01" else
                                 "000";
 
-            instrucao_jumpbit5 <= '1' when comparar = '1' and instrucao(12 downto 11) = "01" else '0';
             registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";
         -- erros de opcode
             erro_instrucao <=   "0001" when sistema ='1' and instrucao(8 downto 0) > B"000_000_000" else

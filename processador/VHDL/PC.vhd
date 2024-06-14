@@ -33,6 +33,7 @@ entity PC is
                      atual_registrador <= '0' & endereco_entrada;
                   elsif somar = '1' then
                      endereco_saida <= prox_registrador(6 downto 0) - 1 + endereco_entrada;
+                     atual_registrador <= '0' & (prox_registrador(6 downto 0) - 1 + endereco_entrada);
                      if prox_registrador(7) = '1' and endereco_entrada(6) = '0' then 
                         erro_endereco <= '1';
                      else

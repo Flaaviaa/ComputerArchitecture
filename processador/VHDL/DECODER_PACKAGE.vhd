@@ -17,7 +17,6 @@ entity DECODER_PACKAGE is
         endereco_pc : out unsigned(6 downto 0);
         instrucao_branch : out std_logic;
         instrucao_jump : out std_logic;
-        instrucao_jumpbit5 : out std_logic;
         ina_ula : out unsigned(15 downto 0);
         inb_ula : out unsigned(15 downto 0);
         select_op_ula : out unsigned(1 downto 0);
@@ -88,7 +87,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             instrucao_branch : out std_logic;
             instrucao_jump : out std_logic;
             select_mux_pc : out unsigned(1 downto 0);
-            instrucao_jumpbit5 : out std_logic := '0';
             wr_en_pc : out std_logic;
             select_ula_op : out unsigned(1 downto 0);
             select_mux_ula : out std_logic; 
@@ -158,7 +156,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         instrucao_branch => UC_instrucao_branch,
         instrucao_jump => UC_instrucao_jump,
         select_mux_pc => select_mux_pc,
-        instrucao_jumpbit5 => instrucao_jumpbit5,
         wr_en_pc => wr_en_pc,
         select_ula_op => UC_select_ula_op,
         select_mux_ula => UC_select_mux_ula,
