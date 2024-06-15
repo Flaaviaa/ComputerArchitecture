@@ -30,9 +30,10 @@ entity UC is
         brake : out std_logic := '0';
         -- REG FLAGS E REGISTRADOR DA ULA
         regflags_wr_en : out std_logic := '0';
-        regula_wr_en : out std_logic := '0'
+        regula_wr_en : out std_logic := '0';
         -- RAM
-        ram_wr_en : out std_logic
+        ram_wr_en : out std_logic;
+        ram_endereco : out unsigned(6 downto 0)
     );
 end entity;
 
@@ -54,6 +55,8 @@ architecture a_UC of UC is
     signal jump : std_logic := '0';
     signal branch : std_logic := '0';
     signal comparar : std_logic := '0';
+    signal lw : std_logic := '0';
+    signal sw : std_logic := '0';
 
     signal reg_on : std_logic := '0';
     signal acc_on : std_logic := '0';
@@ -62,14 +65,16 @@ architecture a_UC of UC is
 
         -- instrucoes 
             sistema <= '1' when opcode = "000" else '0';
-            add <= '1' when opcode = "001" else '0';
+            add <= '1' when opcode = "001" and instrucao(11) = '0' else '0';
             addi <= '1' when opcode = "010" else '0';
-            sub <= '1' when opcode = "011" else '0';
+            sub <= '1' when opcode = "001" and instrucao(11) = '1' else '0';
             mov <= '1' when opcode = "100" else '0';
             ld <= '1' when opcode = "101" else '0';
             jump <= '1' when opcode = "110" and instrucao(12) = '0' else '0';
             branch <= '1' when opcode = "110" and instrucao(12) = '1' else '0';
             comparar <= '1' when opcode = "111" else '0';
+            lw <= '1' when opcode = "011" and instrucao(11) = '0' else '0';
+            sw <= '1' when opcode = "011" and instrucao(11) = '1' else '0';
 
             instrucao_branch <= branch;
             instrucao_jump <= jump;
@@ -108,7 +113,9 @@ architecture a_UC of UC is
                                 "000";
 
             registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";
-            ram_wr_en <= '1' when addi = '1' --instrucao?;
+            ram_wr_en <= sw;
+            ram_endereco <= instrucao(6 downto 0) when sw = '1' else "0000000";
+            
         -- erros de opcode
             erro_instrucao <=   "0001" when sistema ='1' and instrucao(8 downto 0) > B"000_000_000" else
                                 "0010" when add ='1' and instrucao(8 downto 6) > "000" else

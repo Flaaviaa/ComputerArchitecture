@@ -12,6 +12,8 @@ entity DECODER_PACKAGE is
         estado : in unsigned(1 downto 0);
         saida_ula : in unsigned(15 downto 0);
 
+        dado_out_ram : in unsigned(15 downto 0);
+
         bit5 : out std_logic;
         wr_en_pc : out std_logic;
         endereco_pc : out unsigned(6 downto 0);
@@ -23,6 +25,10 @@ entity DECODER_PACKAGE is
         select_mux_pc : out unsigned(1 downto 0);
         instrucao_erro : out unsigned(3 downto 0);
         brake : out std_logic;
+        wr_en_ram : out std_logic;
+        endereco_ram : out unsigned(6 downto 0);
+
+        dado_in_ram : out unsigned(15 downto 0);
 
         regflags_wr_en : out std_logic;
         regula_wr_en : out std_logic
@@ -46,6 +52,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     signal UC_selec_reg1 : unsigned(2 downto 0) := "000";
     signal UC_selec_reg2 : unsigned(2 downto 0) := "000";
     signal UC_registrador_para_salvar : unsigned(2 downto 0) := "000";
+    signal UC_wr_en_ram : std_logic := '0';
+    signal UC_ram_endereco : unsigned(6 downto 0) := "0000000";
 
     signal acc_data_in  : unsigned(15 downto 0) := "0000000000000000";
     signal acc_data_out : unsigned(15 downto 0) := "0000000000000000";
@@ -78,11 +86,9 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     signal mux_acc_entradazero : unsigned(15 downto 0) := "0000000000000000";
     signal mux_acc_entradaum : unsigned(15 downto 0) := "0000000000000000";
     signal mux_acc_entradadois : unsigned(15 downto 0) := "0000000000000000";
-    signal mux_acc_saida : unsigned(15 downto 0):= "0000000000000000";
+    signal mux_acc_entradatres : unsigned(15 downto 0) := "0000000000000000";
+    signal mux_acc_saida : unsigned(15 downto 0) := "0000000000000000";
 
-    signal ram_wr_en      : std_logic;
-    signal ram_in         : unsigned (6 downto 0);
-    signal ram_out        : unsigned (15 downto 0);
 
     component UC is
         port(
@@ -104,7 +110,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             brake : out std_logic;
             regflags_wr_en : out std_logic;
             regula_wr_en : out std_logic;
-            ram_wr_en : out std_logic
+            ram_wr_en : out std_logic;
+            ram_endereco : out unsigned(6 downto 0)
         );
     end component;
     component constante is
@@ -144,22 +151,14 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             saida : out unsigned(15 downto 0)
         );
     end component;
-    component mutex16bits3vias
+    component mutex16bits4vias
         port(
             controle : in unsigned(1 downto 0):= "00";
             entradazero : in unsigned(15 downto 0) := "0000000000000000";
             entradaum : in unsigned(15 downto 0) := "0000000000000000";
             entradadois : in unsigned(15 downto 0) := "0000000000000000";
+            entradatres : in unsigned(15 downto 0) := "0000000000000000";
             saida : out unsigned(15 downto 0) := "0000000000000000"
-        );
-    end component;
-    component ram is
-        port (
-            clk      : in std_logic;
-            endereco : in unsigned(6 downto 0);
-            wr_en    : in std_logic;
-            dado_in  : in unsigned(15 downto 0);
-            dado_out : out unsigned(15 downto 0)
         );
     end component;
 
@@ -183,7 +182,8 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         brake => brake,
         regflags_wr_en => UC_regflags_wr_en,
         regula_wr_en => UC_regula_wr_en,
-        ram_wr_en => ram_wr_en
+        ram_wr_en => UC_wr_en_ram,
+        ram_endereco => UC_ram_endereco
         );
     constante_instance : constante port map(
         instrucao => constante_instrucao,
@@ -226,33 +226,32 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         saida => mux_reg_saida 
         );
 
-    mutex_acc_instance : mutex16bits3vias port map(
+    mutex_acc_instance : mutex16bits4vias port map(
         controle => mux_acc_controle,
         entradazero => mux_acc_entradazero,
         entradaum => mux_acc_entradaum,
         entradadois => mux_acc_entradadois,
+        entradatres => mux_acc_entradatres,
         saida => mux_acc_saida
         );
 
-    ram_instance: ram port map (
-        clk      => clk,
-        endereco => ram_in,
-        wr_en    => ram_wr_en,
-        dado_in  => reg_data2,
-        dado_out => ram_out
-        );
+
     
     
     reg_wr_en <= '1' when UC_reg_wr_en = '1' and estado = "10" else '0' ;
     acc_wr_en <= '1' when UC_acc_wr_en = '1' and estado = "10" else '0';
     regflags_wr_en <= '1' when UC_regflags_wr_en = '1' and estado = "00" else '0';
     regula_wr_en <= '1' when UC_regula_wr_en = '1' and estado = "00" else '0';
+    wr_en_ram <= UC_wr_en_ram;
+    dado_in_ram <= acc_data_out;
+    endereco_ram <= UC_ram_endereco;
     -- conexao mutexes
         -- mutex acumulador
         mux_acc_controle <= UC_select_mux_acc;
         mux_acc_entradazero <= reg_data1;
         mux_acc_entradaum <= saida_ula;
         mux_acc_entradadois <= constante_saida;
+        mux_acc_entradatres <= dado_out_ram;
         -- mutex ula
         mux_ula_controle <= UC_select_mux_ula;
         mux_ula_entradazero <= reg_data1;
@@ -278,8 +277,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     bit5 <= reg_data1(5);
     constante_instrucao <= instrucao;
     endereco_pc <= constante_delta_salto_branch;
-    -- RAM
-    ram_in <= reg_data2;
 
 
 end architecture;

@@ -9,18 +9,22 @@ entity EXECUTE_PACKAGE is
         rst : in std_logic;
         estado : in unsigned(1 downto 0);
         -- entrada
+        exe_in_ram_dado : in unsigned(15 downto 0);
+        exe_ram_wr_en : in std_logic;
+        exe_ram_endereco : in unsigned(6 downto 0);
+        
         exe_select_mux_pc : in unsigned(1 downto 0);
         exe_select_op_ula : in unsigned(1 downto 0);
         exe_ina_ula : in unsigned(15 downto 0);
         exe_inb_ula : in unsigned(15 downto 0);
         exe_bit5 : in std_logic;
-        --novo
         exe_regflags_wr_en : in std_logic;
         exe_regula_wr_en : in std_logic;
         -- saída
         exe_result_ula : out unsigned(15 downto 0);
         exe_saida_reg : out unsigned(15 downto 0);
-        exe_saida_mux_pc : out std_logic
+        exe_saida_mux_pc : out std_logic;
+        exe_saida_ram : out unsigned(15 downto 0)
     );
 end entity;
 
@@ -40,8 +44,18 @@ architecture A_EXECUTE_PACKAGE of EXECUTE_PACKAGE is
     signal signal_negativo_out : std_logic := '0';
     signal signal_zero_out : std_logic := '0';
 
+    signal wr_en_ram : std_logic := '0';
     signal signal_exe_saida_mux_pc : std_logic := '0';
-
+    
+    component ram is
+        port(
+            clk      : in std_logic;
+            endereco : in unsigned(6 downto 0);
+            wr_en    : in std_logic;
+            dado_in  : in unsigned(15 downto 0);
+            dado_out : out unsigned(15 downto 0)
+        );
+        end component;
     component ULA is
         port(
             ina : in unsigned(15 downto 0) := "0000000000000000";
@@ -81,6 +95,13 @@ architecture A_EXECUTE_PACKAGE of EXECUTE_PACKAGE is
     end component;
 
     begin
+    ram_instance : ram port map(
+        clk => clk,
+        endereco => exe_ram_endereco,
+        wr_en => wr_en_ram,
+        dado_in => exe_in_ram_dado,
+        dado_out => exe_saida_ram
+    );
     ULA_instance : ULA port map(
         ina => signal_ina,
         inb => signal_inb,
@@ -110,7 +131,7 @@ architecture A_EXECUTE_PACKAGE of EXECUTE_PACKAGE is
         zero_out => signal_zero_out,
         bit5_out => signal_saida_bit5
     );
-    
+    wr_en_ram <= exe_ram_wr_en;
     exe_result_ula <= signal_resultado_ula;
     exe_result_ula <= signal_resultado_ula;
     -- conexoes

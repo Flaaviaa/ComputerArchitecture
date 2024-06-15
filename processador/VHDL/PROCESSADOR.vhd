@@ -43,7 +43,10 @@ architecture A_PROCESSADOR of PROCESSADOR is
     signal fet_saida_mux_pc : std_logic := '0';
     signal fet_endereco_entrada_pc : unsigned(6 downto 0) := "0000000";
     signal fet_instrucao : unsigned(15 downto 0) := "0000000000000000";
-
+    
+    signal exe_in_ram_dado : unsigned(15 downto 0) := "0000000000000000";
+    signal exe_ram_wr_en : std_logic := '0';
+    signal exe_ram_endereco : unsigned(6 downto 0) := "0000000";
     signal exe_select_mux_pc : unsigned(1 downto 0) := "00";
     signal exe_select_op_ula : unsigned(1 downto 0) := "00";
     signal exe_ina_ula : unsigned(15 downto 0) := "0000000000000000";
@@ -54,6 +57,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
     signal exe_result_ula : unsigned(15 downto 0) := "0000000000000000";
     signal exe_saida_mux_pc : std_logic := '0';
     signal exe_saida_mux_pc_ou_bit5 : std_logic := '0';
+    signal exe_saida_ram : unsigned(15 downto 0) := "0000000000000000";
 
     signal ina_ula : unsigned(15 downto 0) := "0000000000000000";
     signal inb_ula : unsigned(15 downto 0) := "0000000000000000";
@@ -69,6 +73,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
     signal exe_saida_reg : unsigned(15 downto 0) := "0000000000000000";
     signal regflags_wr_en : std_logic := '0';
     signal regula_wr_en : std_logic := '0';
+    signal wr_en_ram : std_logic := '0';
 
     component FATCH_PACKAGE is
         port(
@@ -89,6 +94,9 @@ architecture A_PROCESSADOR of PROCESSADOR is
             clk : in std_logic;
             rst : in std_logic;
             estado : in unsigned(1 downto 0);
+            exe_in_ram_dado : in unsigned(15 downto 0);
+            exe_ram_wr_en : in std_logic;
+            exe_ram_endereco : in unsigned(6 downto 0);
             exe_select_mux_pc : in unsigned(1 downto 0);
             exe_select_op_ula : in unsigned(1 downto 0);
             exe_ina_ula : in unsigned(15 downto 0);
@@ -98,8 +106,8 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_regula_wr_en : in std_logic;
             exe_result_ula : out unsigned(15 downto 0);
             exe_saida_mux_pc : out std_logic;
-            exe_saida_reg : out unsigned(15 downto 0)
-        
+            exe_saida_reg : out unsigned(15 downto 0);
+            exe_saida_ram : out unsigned(15 downto 0)
         );
     end component;
     component DECODER_PACKAGE is 
@@ -121,7 +129,13 @@ architecture A_PROCESSADOR of PROCESSADOR is
             instrucao_erro : out unsigned(3 downto 0);
             brake : out std_logic;
             regflags_wr_en : out std_logic;
-            regula_wr_en : out std_logic
+            regula_wr_en : out std_logic;
+
+            wr_en_ram : out std_logic;
+            endereco_ram : out unsigned(6 downto 0);
+            dado_out_ram : in unsigned(15 downto 0);
+            dado_in_ram : out unsigned(15 downto 0)
+            
         );
     end component;
     
@@ -142,6 +156,12 @@ architecture A_PROCESSADOR of PROCESSADOR is
             clk => clk_controled,
             rst => rst,
             estado => estado,
+
+            wr_en_ram => wr_en_ram,
+            endereco_ram => exe_ram_endereco,
+            dado_out_ram => exe_saida_ram,
+            dado_in_ram => exe_in_ram_dado,
+
             instrucao => instrucao,
             saida_ula => saida_ula,
             bit5 => bit5,
@@ -162,6 +182,9 @@ architecture A_PROCESSADOR of PROCESSADOR is
             clk => clk_controled,
             rst => rst,
             estado => estado,
+            exe_in_ram_dado => exe_in_ram_dado,
+            exe_ram_wr_en => exe_ram_wr_en,
+            exe_ram_endereco => exe_ram_endereco,
             exe_select_mux_pc => exe_select_mux_pc,
             exe_select_op_ula => exe_select_op_ula,
             exe_ina_ula => exe_ina_ula,
@@ -171,9 +194,12 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_regula_wr_en => exe_regula_wr_en,
             exe_result_ula => exe_result_ula,
             exe_saida_reg => exe_saida_reg,
-            exe_saida_mux_pc => exe_saida_mux_pc
+            exe_saida_mux_pc => exe_saida_mux_pc,
+            exe_saida_ram => exe_saida_ram
         );
         -- conectar cabos =(
+            exe_ram_wr_en <= wr_en_ram;
+
             brake <= signal_brake;
             clk_controled <= clk when signal_brake = '0' else '0';
             exe_regflags_wr_en <= regflags_wr_en;
