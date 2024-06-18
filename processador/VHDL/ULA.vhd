@@ -50,7 +50,7 @@ architecture a_ULA of ULA is
                             '1' when (operationselect = "01" or operationselect = "10") and ina(15) = '1' and inb(15) = '0' and sub(15) = '0' else
                             '0';
         
-        signal_negativo <=   signal_result(15);
+        signal_negativo <=  '1' when sub(15 downto 0) = "0000000000000000";
 
         result <= signal_result;
         overflow <= signal_overflow ;
