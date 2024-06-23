@@ -21,6 +21,7 @@ architecture A_PROCESSADOR_TB of PROCESSADOR_TB is
     signal clk : std_logic := '0';
     signal rst : std_logic := '1';
     signal estado : unsigned(1 downto 0) := "00";
+    signal erro_ram : std_logic := '0';
 
     component PROCESSADOR is
         port(
@@ -29,7 +30,8 @@ architecture A_PROCESSADOR_TB of PROCESSADOR_TB is
             estado : in unsigned(1 downto 0);
             instrucao_erro : out unsigned(3 downto 0);
             brake : out std_logic;
-            fet_erro_endereco : out std_logic
+            fet_erro_endereco : out std_logic;
+            erro_ram : out std_logic
         );
     end component;
 
@@ -40,7 +42,8 @@ architecture A_PROCESSADOR_TB of PROCESSADOR_TB is
             estado => estado,
             instrucao_erro => instrucao_erro,
             brake => brake,
-            fet_erro_endereco => fet_erro_endereco
+            fet_erro_endereco => fet_erro_endereco,
+            erro_ram => erro_ram
         );
 
     reset : process

@@ -5,10 +5,11 @@ use ieee.numeric_std.all;
 entity ram is
     port (
         clk      : in std_logic := '0';
-        endereco : in unsigned(6 downto 0) := "0000000";
+        endereco : in unsigned(15 downto 0) := "0000000000000000";
         wr_en    : in std_logic := '0';
         dado_in  : in unsigned(15 downto 0) := "0000000000000000";
-        dado_out : out unsigned(15 downto 0) := "0000000000000000"
+        dado_out : out unsigned(15 downto 0) := "0000000000000000";
+        acess_error : out std_logic := '0'
 
     );
 
@@ -24,7 +25,12 @@ begin
     begin
         if wr_en = '1' then
             if rising_edge(clk) then
-                conteudo_ram(to_integer(endereco)) <= dado_in;
+                if endereco(15 downto 7) = "000000000" then 
+                    conteudo_ram(to_integer(endereco(6 downto 0))) <= dado_in;
+                    acess_error <= '0';
+                else 
+                    acess_error <= '1';
+                end if;
             end if;
         end if;
     end process;

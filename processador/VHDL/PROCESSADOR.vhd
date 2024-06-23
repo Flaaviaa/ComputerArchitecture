@@ -5,30 +5,14 @@ use ieee.numeric_std.all;
 
 entity PROCESSADOR is
     port(
-        clk : in std_logic;
-        rst : in std_logic;
-        estado : in unsigned(1 downto 0);
+        clk : in std_logic := '0';
+        rst : in std_logic := '0';
+        estado : in unsigned(1 downto 0) := "00";
 
-        -- constante_entrada_pc : out unsigned(6 downto 0);
-        -- endereco_saida_pc : out unsigned(6 downto 0);
-        
-
-        -- ula_ina : out unsigned(15 downto 0);
-        -- ula_inb : out unsigned(15 downto 0);
-
-        -- somar : out std_logic;
-        -- saltar : out std_logic;
-
-        
-        -- result : out unsigned(15 downto 0);
-
-        -- jbit5 : out std_logic;
-        -- jump : out std_logic;
-        -- branch : out std_logic;
-
-        instrucao_erro : out unsigned(3 downto 0);
-        brake : out std_logic;
-        fet_erro_endereco : out std_logic
+        instrucao_erro : out unsigned(3 downto 0) := "0000";
+        brake : out std_logic := '0';
+        fet_erro_endereco : out std_logic := '0';
+        erro_ram : out std_logic := '0'
     );
 end entity;
 
@@ -46,7 +30,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
     
     signal exe_in_ram_dado : unsigned(15 downto 0) := "0000000000000000";
     signal exe_ram_wr_en : std_logic := '0';
-    signal exe_ram_endereco : unsigned(6 downto 0) := "0000000";
+    signal exe_ram_endereco : unsigned(15 downto 0) := "0000000000000000";
     signal exe_select_mux_pc : unsigned(1 downto 0) := "00";
     signal exe_select_op_ula : unsigned(1 downto 0) := "00";
     signal exe_ina_ula : unsigned(15 downto 0) := "0000000000000000";
@@ -58,6 +42,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
     signal exe_saida_mux_pc : std_logic := '0';
     signal exe_saida_mux_pc_ou_bit5 : std_logic := '0';
     signal exe_saida_ram : unsigned(15 downto 0) := "0000000000000000";
+    signal exe_erro_ram : std_logic := '0';
 
     signal ina_ula : unsigned(15 downto 0) := "0000000000000000";
     signal inb_ula : unsigned(15 downto 0) := "0000000000000000";
@@ -96,7 +81,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
             estado : in unsigned(1 downto 0);
             exe_in_ram_dado : in unsigned(15 downto 0);
             exe_ram_wr_en : in std_logic;
-            exe_ram_endereco : in unsigned(6 downto 0);
+            exe_ram_endereco : in unsigned(15 downto 0);
             exe_select_mux_pc : in unsigned(1 downto 0);
             exe_select_op_ula : in unsigned(1 downto 0);
             exe_ina_ula : in unsigned(15 downto 0);
@@ -107,7 +92,8 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_result_ula : out unsigned(15 downto 0);
             exe_saida_mux_pc : out std_logic;
             exe_saida_reg : out unsigned(15 downto 0);
-            exe_saida_ram : out unsigned(15 downto 0)
+            exe_saida_ram : out unsigned(15 downto 0);
+            exe_erro_ram : out std_logic := '0'
         );
     end component;
     component DECODER_PACKAGE is 
@@ -132,7 +118,7 @@ architecture A_PROCESSADOR of PROCESSADOR is
             regula_wr_en : out std_logic;
 
             wr_en_ram : out std_logic;
-            endereco_ram : out unsigned(6 downto 0);
+            endereco_ram : out unsigned(15 downto 0);
             dado_out_ram : in unsigned(15 downto 0);
             dado_in_ram : out unsigned(15 downto 0)
             
@@ -195,7 +181,8 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_result_ula => exe_result_ula,
             exe_saida_reg => exe_saida_reg,
             exe_saida_mux_pc => exe_saida_mux_pc,
-            exe_saida_ram => exe_saida_ram
+            exe_saida_ram => exe_saida_ram,
+            exe_erro_ram => exe_erro_ram
         );
         -- conectar cabos =(
             exe_ram_wr_en <= wr_en_ram;
@@ -219,9 +206,5 @@ architecture A_PROCESSADOR of PROCESSADOR is
             exe_inb_ula <= inb_ula;
             exe_bit5 <= bit5;
 
-            -- ula_ina <= ina_ula;
-            -- ula_inb <= inb_ula;
-            -- result <= saida_ula;
-            -- constante_entrada_pc <= endereco_pc;
 
 end architecture;

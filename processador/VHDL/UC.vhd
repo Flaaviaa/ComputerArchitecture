@@ -20,6 +20,7 @@ entity UC is
         -- REG
         reg_wr_en : out std_logic := '1'; 
         selec_reg1 : out unsigned(2 downto 0) := "000";
+        selec_reg2 : out unsigned(2 downto 0) := "000";
         registrador_para_salvar : out unsigned(2 downto 0) := "000";
         select_mux_input_regs : out std_logic := '1';
         -- ACC
@@ -32,8 +33,7 @@ entity UC is
         regflags_wr_en : out std_logic := '0';
         regula_wr_en : out std_logic := '0';
         -- RAM
-        ram_wr_en : out std_logic;
-        ram_endereco : out unsigned(6 downto 0)
+        ram_wr_en : out std_logic
     );
 end entity;
 
@@ -76,6 +76,8 @@ architecture a_UC of UC is
             lw <= '1' when opcode = "011" and instrucao(11) = '0' else '0';
             sw <= '1' when opcode = "011" and instrucao(11) = '1' else '0';
 
+            selec_reg2 <= instrucao(10 downto 8) when lw = '1' or sw = '1' else "000";
+
             instrucao_branch <= branch;
             instrucao_jump <= jump;
             regflags_wr_en <= '1' when comparar = '1' or add = '1' or addi = '1' or sub = '1';
@@ -114,7 +116,6 @@ architecture a_UC of UC is
 
             registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";
             ram_wr_en <= sw;
-            ram_endereco <= instrucao(6 downto 0) when sw = '1' else "0000000";
             
         -- erros de opcode
             erro_instrucao <=   "0001" when sistema ='1' and instrucao(8 downto 0) > B"000_000_000" else
@@ -126,6 +127,7 @@ architecture a_UC of UC is
                                 "0111" when jump ='1' and instrucao(9 downto 7) > "000" else
                                 "1000" when branch ='1' and instrucao(9 downto 7) > "000" else
                                 "1001" when comparar ='1' and (instrucao(10 downto 7) > "0000")else
+                                "1010" when (lw = '1' or sw = '1') and (instrucao(6 downto 0) > "0000000" or instrucao(12 downto 11) > "01") else
                                 "0000";
 
             brake <= '1' when sistema = '1' and instrucao(12 downto 10) = "011" else '0';

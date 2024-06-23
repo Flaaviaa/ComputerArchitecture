@@ -5,33 +5,28 @@ use ieee.numeric_std.all;
 
 entity DECODER_PACKAGE is
     port(
-        clk : in std_logic;
-        rst : in std_logic;
-
-        instrucao : in unsigned(15 downto 0);
-        estado : in unsigned(1 downto 0);
-        saida_ula : in unsigned(15 downto 0);
-
-        dado_out_ram : in unsigned(15 downto 0);
-
-        bit5 : out std_logic;
-        wr_en_pc : out std_logic;
-        endereco_pc : out unsigned(6 downto 0);
-        instrucao_branch : out std_logic;
-        instrucao_jump : out std_logic;
-        ina_ula : out unsigned(15 downto 0);
-        inb_ula : out unsigned(15 downto 0);
-        select_op_ula : out unsigned(1 downto 0);
-        select_mux_pc : out unsigned(1 downto 0);
-        instrucao_erro : out unsigned(3 downto 0);
-        brake : out std_logic;
-        wr_en_ram : out std_logic;
-        endereco_ram : out unsigned(6 downto 0);
-
-        dado_in_ram : out unsigned(15 downto 0);
-
-        regflags_wr_en : out std_logic;
-        regula_wr_en : out std_logic
+        clk : in std_logic := '0';
+        rst : in std_logic := '0';
+        instrucao : in unsigned(15 downto 0) := "0000000000000000";
+        estado : in unsigned(1 downto 0) := "00";
+        saida_ula : in unsigned(15 downto 0) := "0000000000000000";
+        dado_out_ram : in unsigned(15 downto 0) := "0000000000000000";
+        bit5 : out std_logic := '0';
+        wr_en_pc : out std_logic := '0';
+        endereco_pc : out unsigned(6 downto 0) := "0000000";
+        instrucao_branch : out std_logic := '0';
+        instrucao_jump : out std_logic := '0';
+        ina_ula : out unsigned(15 downto 0) := "0000000000000000";
+        inb_ula : out unsigned(15 downto 0) := "0000000000000000";
+        select_op_ula : out unsigned(1 downto 0) := "00";
+        select_mux_pc : out unsigned(1 downto 0) := "00";
+        instrucao_erro : out unsigned(3 downto 0) := "0000";
+        brake : out std_logic := '0';
+        wr_en_ram : out std_logic := '0';
+        endereco_ram : out unsigned(15 downto 0) := "0000000000000000";
+        dado_in_ram : out unsigned(15 downto 0) := "0000000000000000";
+        regflags_wr_en : out std_logic := '0';
+        regula_wr_en : out std_logic := '0'
     );
 end entity;
 
@@ -53,7 +48,6 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     signal UC_selec_reg2 : unsigned(2 downto 0) := "000";
     signal UC_registrador_para_salvar : unsigned(2 downto 0) := "000";
     signal UC_wr_en_ram : std_logic := '0';
-    signal UC_ram_endereco : unsigned(6 downto 0) := "0000000";
 
     signal acc_data_in  : unsigned(15 downto 0) := "0000000000000000";
     signal acc_data_out : unsigned(15 downto 0) := "0000000000000000";
@@ -102,6 +96,7 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             select_mux_ula : out std_logic; 
             reg_wr_en : out std_logic; 
             selec_reg1 : out unsigned(2 downto 0);
+            selec_reg2 : out unsigned(2 downto 0);
             registrador_para_salvar : out unsigned(2 downto 0);
             select_mux_input_regs : out std_logic;
             acc_wr_en : out std_logic;
@@ -110,8 +105,7 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
             brake : out std_logic;
             regflags_wr_en : out std_logic;
             regula_wr_en : out std_logic;
-            ram_wr_en : out std_logic;
-            ram_endereco : out unsigned(6 downto 0)
+            ram_wr_en : out std_logic
         );
     end component;
     component constante is
@@ -174,6 +168,7 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         select_mux_ula => UC_select_mux_ula,
         reg_wr_en => UC_reg_wr_en,
         selec_reg1 => UC_selec_reg1,
+        selec_reg2 => UC_selec_reg2,
         registrador_para_salvar => UC_registrador_para_salvar,
         select_mux_input_regs => UC_select_mux_regs,
         acc_wr_en => UC_acc_wr_en,
@@ -182,8 +177,7 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
         brake => brake,
         regflags_wr_en => UC_regflags_wr_en,
         regula_wr_en => UC_regula_wr_en,
-        ram_wr_en => UC_wr_en_ram,
-        ram_endereco => UC_ram_endereco
+        ram_wr_en => UC_wr_en_ram
         );
     constante_instance : constante port map(
         instrucao => constante_instrucao,
@@ -244,7 +238,7 @@ architecture A_DECODER_PACKAGE of DECODER_PACKAGE is
     regula_wr_en <= '1' when UC_regula_wr_en = '1' and estado = "00" else '0';
     wr_en_ram <= UC_wr_en_ram;
     dado_in_ram <= acc_data_out;
-    endereco_ram <= UC_ram_endereco;
+    endereco_ram <= reg_data2;
     -- conexao mutexes
         -- mutex acumulador
         mux_acc_controle <= UC_select_mux_acc;

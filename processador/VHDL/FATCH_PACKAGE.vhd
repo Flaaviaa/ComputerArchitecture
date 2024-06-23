@@ -27,12 +27,13 @@ architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
     signal PC_somar : std_logic := '0';
     signal PC_endereco_saida : unsigned(6 downto 0) := "0000000";
 
-    signal ROM_read_en  : std_logic;
-    signal ROM_endereco : unsigned(6 downto 0);
-    signal ROM_dado : unsigned(15 downto 0);
+    signal ROM_read_en  : std_logic := '0';
+    signal ROM_endereco : unsigned(6 downto 0) := "0000000";
+    signal ROM_dado : unsigned(15 downto 0) := "0000000000000000";
 
-    signal REG_wr_en    : std_logic;
-    signal REG_data_in  : unsigned(15 downto 0);
+    signal REG_wr_en    : std_logic := '0';
+    signal REG_data_in  : unsigned(15 downto 0) := "0000000000000000";
+    signal REG_data_out : unsigned(15 downto 0) := "0000000000000000";
 
     component PC is
         port(
@@ -93,10 +94,11 @@ architecture A_FATCH_PACKAGE of FATCH_PACKAGE is
         rst => rst,
         wr_en => REG_wr_en,
         data_in => REG_data_in,
-        data_out => fet_instrucao
+        data_out => REG_data_out
         );  
 
         -- conexoes
+        fet_instrucao <= REG_data_out;
         ROM_endereco <= PC_endereco_saida;
         REG_data_in <= ROM_dado;
         -- porta logica de saltar
