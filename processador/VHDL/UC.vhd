@@ -92,7 +92,7 @@ architecture a_UC of UC is
 
             acc_wr_en <=    '1' when mov = '1' and instrucao(8) = '1' else
                             '1' when ld = '1' and instrucao(8) = '1' else
-                            '1' when add = '1' or addi = '1' or sub = '1' else
+                            '1' when add = '1' or addi = '1' or sub = '1' or lw = '1' else
                             '0';
 
             select_mux_input_regs <= '1' when ld = '1' else '0';
@@ -106,7 +106,8 @@ architecture a_UC of UC is
 
             select_mux_acc <=   "00" when mov = '1' else
                                 "10" when ld = '1' else
-                                "01" when add = '1' or addi = '1' or sub = '1' else "00";
+                                "01" when add = '1' or addi = '1' or sub = '1' else
+                                "11" when lw = '1' else "00";
             
             select_mux_pc <=    instrucao(11 downto 10) when jump = '1' or branch = '1' else "00";
 
