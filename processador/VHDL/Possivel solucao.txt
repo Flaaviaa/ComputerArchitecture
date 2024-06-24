@@ -1,0 +1,37 @@
+
+-- preecher tudo com 1 na ram
+
+
+-- laço  de 2 até a raiz
+-- R1 CONTADOR DESSE LAÇO
+-- R2 VALOR FINAL
+ADDI R2,ZERO,6;
+ADDI R1,ZERO,2;
+INICIO
+
+    -- ISSO É PARA O INCREMENTO AO FINAL DO CÓDIGO
+    ADDI R1,R1,1;
+
+        
+
+    -- laço  de 2 até 32
+    -- R3 CONTADOR DESSE LAÇO
+    -- R4 FINAL
+    -- R5 SOMA
+
+    ADDI R3,ZERO,2;
+    ADDI R5,ZERO,ZERO;
+    ADDI R4,ZERO,32;
+
+    SEGUNDO;
+
+        ADD R5,R5,R1;
+        -- INCREMENTO
+        ADDI R3,R3,1;
+        -- zera a posição que tem valor multiplo do laço
+        LW R3,ZERO; -- DA LW NO VALOR DENTRO DE R3 QUE MAPEIA PARA UMA POSICAO NA RAM
+        -- SALTAR
+        BNE R3,R4,SEGUNDO;
+
+-- SALTO/BRANCH - LAÇO PRINCIPAL
+BNE R1,R2,INICIO;
