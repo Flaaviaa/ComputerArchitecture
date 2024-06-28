@@ -1,19 +1,4 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-
-entity rom is
-    port(
-        clk         : in std_logic := '0';
-        read_en     : in std_logic := '0';
-        endereco    : in unsigned(6 downto 0) := "0000000";
-        dado        : out unsigned(15 downto 0) := "0000000000000000"
-    );
-end entity;
-architecture a_rom of rom is
-    type mem is array (0 to 127) of unsigned(15 downto 0);
-    constant conteudo_rom : mem := (
-    -- preenche tudo com 1
+-- preenche tudo com 1
 
     1 => B"101_1_011_0_00100000", -- LD R3,32
     2 => B"101_1_000_1_00000000", -- LD A,0
@@ -53,7 +38,7 @@ architecture a_rom of rom is
         23 => B"100_1_100_0_00000000", -- MOV R4,A
         24 => B"101_1_000_1_00000000", -- LD A,0
         25 => B"011_01_100_00000000", -- SW A, R4;
-        26 => B"100_1_100_1_00000000", -- MOV A, R4
+        26 => B"100_1_010_1_00000000", -- MOV A, R1
         27 => B"111_1_01_011_0000000", -- CMP A,R3
         28 => B"110_1_10_000_1111001", -- BNE A,R3,-6
 
@@ -62,15 +47,4 @@ architecture a_rom of rom is
     30 => B"111_1_01_001_0000000", -- CMP A,R1
     31 => B"110_1_10_000_1110000", -- BNE A,R1,-16
 
-    others => (others => '0')
-    );
-    begin
-        process(clk)
-        begin
-            if read_en = '1' then
-                if(rising_edge(clk)) then
-                    dado <= conteudo_rom(to_integer(endereco));
-                end if;
-            end if;
-        end process;
-end architecture;
+    
