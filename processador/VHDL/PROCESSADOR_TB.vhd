@@ -16,7 +16,7 @@ end entity;
 
 
 architecture A_PROCESSADOR_TB of PROCESSADOR_TB is 
-    signal contador : unsigned(9 downto 0) := "0000000000";
+    signal contador : unsigned(13 downto 0) := "00000000000000";
 
     signal clk : std_logic := '0';
     signal rst : std_logic := '1';
@@ -56,7 +56,7 @@ architecture A_PROCESSADOR_TB of PROCESSADOR_TB is
 
     process
         begin 
-            while contador /= "1111111111" loop
+            while contador /= "11111111111111" loop
                 
                 clk <= '0';
                 wait for 50 ns;

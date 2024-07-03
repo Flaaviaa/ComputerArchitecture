@@ -57,6 +57,7 @@ architecture a_UC of UC is
     signal comparar : std_logic := '0';
     signal lw : std_logic := '0';
     signal sw : std_logic := '0';
+    signal jb5 : std_logic := '0';
 
     signal reg_on : std_logic := '0';
     signal acc_on : std_logic := '0';
@@ -75,12 +76,12 @@ architecture a_UC of UC is
             comparar <= '1' when opcode = "111" else '0';
             lw <= '1' when opcode = "011" and instrucao(11) = '0' else '0';
             sw <= '1' when opcode = "011" and instrucao(11) = '1' else '0';
-
+            jb5 <= '1' when opcode = "110" and instrucao(11 downto 10) = "11" else '0';
             selec_reg2 <= instrucao(10 downto 8) when lw = '1' or sw = '1' else "000";
 
             instrucao_branch <= branch;
-            instrucao_jump <= jump;
-            regflags_wr_en <= '1' when comparar = '1' or add = '1' or addi = '1' or sub = '1';
+            instrucao_jump <= '1' when jump = '1' or jb5 = '1' else '0';
+            regflags_wr_en <= '1' when comparar = '1' or add = '1' or addi = '1' or sub = '1' else '0';
             regula_wr_en <= '1' when add = '1' or addi = '1' or sub = '1' else '0';
 
             brake <=    '1' when sistema = '1' and instrucao(12 downto 10) > "000" else '0';
@@ -109,10 +110,11 @@ architecture a_UC of UC is
                                 "01" when add = '1' or addi = '1' or sub = '1' else
                                 "11" when lw = '1' else "00";
             
-            select_mux_pc <=    instrucao(11 downto 10) when jump = '1' or branch = '1' else "00";
+            select_mux_pc <=    instrucao(11 downto 10) when jump = '1' or branch = '1' or jb5 = '1' else "00";
 
-            selec_reg1 <=       instrucao(11 downto 9) when add = '1' or addi = '1' or sub = '1' or mov = '1' or ld = '1'else
-                                instrucao(9 downto 7) when comparar = '1' and instrucao(11 downto 10) = "01" else
+            selec_reg1 <=       instrucao(11 downto 9) when addi = '1' or mov = '1' or ld = '1'else
+                                instrucao(10 downto 8) when add = '1' or sub = '1' else
+                                instrucao(9 downto 7) when (comparar = '1' and instrucao(11 downto 10) = "01") or jb5 = '1' else
                                 "000";
 
             registrador_para_salvar <= instrucao(11 downto 9) when mov = '1' or ld = '1' else "000";

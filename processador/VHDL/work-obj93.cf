@@ -5,21 +5,21 @@ file . "mutex16bits4vias.vhd" "3789f33bd106c3e1e9efed4c86b9f705cca4516b" "202406
 file . "mutex1bits4vias.vhd" "a0120e1454f713374fc5a1434321c9bd436177df" "20240613232253.161":
   entity mutex1bit4vias at 1( 0) + 0 on 1051;
   architecture a_mutex1bit4vias of mutex1bit4vias at 17( 385) + 0 on 1052;
-file . "PROCESSADOR_TB.vhd" "5156c4ea89249320c9577d2c8ab5d456e9f38bda" "20240627215720.813":
-  entity processador_tb at 1( 0) + 0 on 1383;
-  architecture a_processador_tb of processador_tb at 18( 278) + 0 on 1384;
+file . "PROCESSADOR_TB.vhd" "2351af0db9ff9375a97bd68fec2e4f471c55886a" "20240701164332.416":
+  entity processador_tb at 1( 0) + 0 on 1527;
+  architecture a_processador_tb of processador_tb at 18( 278) + 0 on 1528;
 file . "EXECUTE_PACKAGE_TB.vhd" "d8791ad37c5c0d11b6e1988fcc443052c7e20812" "20240605023053.047":
   entity execute_package_tb at 1( 0) + 0 on 871;
   architecture a_execute_package_tb of execute_package_tb at 10( 114) + 0 on 872;
-file . "EXECUTE_PACKAGE.vhd" "ed26d5bc53e6a6355ad569aeb6bcf37bc77a6e70" "20240627011928.635":
-  entity execute_package at 1( 0) + 0 on 1371;
-  architecture a_execute_package of execute_package at 32( 1219) + 0 on 1372;
-file . "DECODER_PACKAGE.vhd" "1933fc79d53bac76a2d6fe0d2bc0afddc3e8c8e9" "20240623184604.592":
-  entity decoder_package at 1( 0) + 0 on 1357;
-  architecture a_decoder_package of decoder_package at 34( 1315) + 0 on 1358;
-file . "FATCH_PACKAGE.vhd" "e0ede4ea941141b8b01baa7361d1a670e5e00620" "20240627215712.573":
-  entity fatch_package at 1( 0) + 0 on 1379;
-  architecture a_fatch_package of fatch_package at 24( 598) + 0 on 1380;
+file . "EXECUTE_PACKAGE.vhd" "ed26d5bc53e6a6355ad569aeb6bcf37bc77a6e70" "20240701164320.820":
+  entity execute_package at 1( 0) + 0 on 1521;
+  architecture a_execute_package of execute_package at 32( 1219) + 0 on 1522;
+file . "DECODER_PACKAGE.vhd" "1933fc79d53bac76a2d6fe0d2bc0afddc3e8c8e9" "20240701164325.937":
+  entity decoder_package at 1( 0) + 0 on 1523;
+  architecture a_decoder_package of decoder_package at 34( 1315) + 0 on 1524;
+file . "FATCH_PACKAGE.vhd" "e0ede4ea941141b8b01baa7361d1a670e5e00620" "20240701164315.703":
+  entity fatch_package at 1( 0) + 0 on 1519;
+  architecture a_fatch_package of fatch_package at 24( 598) + 0 on 1520;
 file . "ULA.vhd" "5c15fb9ea8e3656ddaf248a29092349145a90a40" "20240627011922.709":
   entity ula at 1( 0) + 0 on 1369;
   architecture a_ula of ula at 23( 624) + 0 on 1370;
@@ -44,9 +44,9 @@ file . "maquina_de_estados.vhd" "2d87e0bdcf7e00d58b9b79ddb5db60ae87d4a52d" "2024
 file . "UC_tb.vhd" "2df55eedf0631515f3e377bd6da5c6c9eac969b4" "20240613232252.547":
   entity uc_tb at 1( 0) + 0 on 1031;
   architecture a_uc_tb of uc_tb at 8( 103) + 0 on 1032;
-file . "UC.vhd" "2634dad62cb29fed8194d2d6a5cd49c3dc2e8366" "20240623184558.741":
-  entity uc at 1( 0) + 0 on 1355;
-  architecture a_uc of uc at 40( 1388) + 0 on 1356;
+file . "UC.vhd" "45770d647e94024e473363dcfd59636e34a3c556" "20240701164309.503":
+  entity uc at 1( 0) + 0 on 1517;
+  architecture a_uc of uc at 40( 1388) + 0 on 1518;
 file . "PC_tb.vhd" "41edaacaeb2a6d39e9d4a21ecab3c92e62923f23" "20240511210140.689":
   entity pc_tb at 1( 0) + 0 on 221;
   architecture a_pc_tb of pc_tb at 8( 92) + 0 on 222;
@@ -56,9 +56,9 @@ file . "rom_PC.vhd" "54cf56d9355bc6b3298a63288f0ac87596ae1259" "20240510190916.4
 file . "somaum.vhd" "27c753be8609014e55a15bb2a9009fc2ccb8074b" "20240510005313.621":
   entity somaum at 1( 0) + 0 on 167;
   architecture a_somaum of somaum at 13( 232) + 0 on 168;
-file . "rom.vhd" "fc4f4f8a392d57199ee8d61fd593c7282483e6b4" "20240627215706.278":
-  entity rom at 1( 0) + 0 on 1377;
-  architecture a_rom of rom at 13( 329) + 0 on 1378;
+file . "rom.vhd" "5d2ae2413ae83e99751ceb3b4acbd6a3e17a2b24" "20240701164306.199":
+  entity rom at 1( 0) + 0 on 1515;
+  architecture a_rom of rom at 14( 359) + 0 on 1516;
 file . "rom_tb.vhd" "6fdd7f91618de7f414b2eb1c0fb6a04109fb49fe" "20240620003456.947":
   entity rom_tb at 1( 0) + 0 on 1227;
   architecture a_rom_tb of rom_tb at 8( 93) + 0 on 1228;
@@ -104,9 +104,9 @@ file . "mutex16bits3vias.vhd" "025e9ebe401fdcaa71b5b812e6fd36ff60622ca7" "202406
 file . "DECODER_PACKAGE_TB.vhd" "2b5532e8fdda614c83358b6bec70a9c425813c35" "20240623004534.489":
   entity decoder_package_tb at 1( 0) + 0 on 1307;
   architecture a_decoder_package_tb of decoder_package_tb at 10( 118) + 0 on 1308;
-file . "PROCESSADOR.vhd" "55fd495f76ac7f7cdf155248e9af1f7ffeeeeb8f" "20240627215717.984":
-  entity processador at 1( 0) + 0 on 1381;
-  architecture a_processador of processador at 20( 434) + 0 on 1382;
+file . "PROCESSADOR.vhd" "55fd495f76ac7f7cdf155248e9af1f7ffeeeeb8f" "20240701164330.263":
+  entity processador at 1( 0) + 0 on 1525;
+  architecture a_processador of processador at 20( 434) + 0 on 1526;
 file . "regflags.vhd" "6b570e22e52e7bcd92841235bf963ce7b74c5b41" "20240613232608.720":
   entity regflags at 1( 0) + 0 on 1061;
   architecture a_regflags of regflags at 22( 668) + 1 on 1062;
