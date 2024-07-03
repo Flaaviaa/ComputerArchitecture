@@ -72,8 +72,8 @@ architecture a_rom of rom is
 
 
         58 => B"000_011_0000000000", -- HALT
-
-        others => (others => '0')
+        
+    others => (others => '0')
     );
     begin
         process(clk)
