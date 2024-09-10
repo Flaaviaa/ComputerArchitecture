@@ -13,7 +13,8 @@ Este projeto foi desenvolvido como parte da disciplina de Arquitetura de Computa
 
 ## 📒 Descrição do Circuito
 
-![Diagrama micro Processador (1)](https://github.com/user-attachments/assets/3196f2bb-442b-4e8a-8373-f856d8daf75a)
+<img width="4627" alt="Diagrama micro Processador" src="https://github.com/user-attachments/assets/cbd76040-9a1a-4b70-bfc3-9643ff2ca1eb">
+
 
 A imagem apresentada ilustra a organização e a interação entre os principais componentes do processador:
 
